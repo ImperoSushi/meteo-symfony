@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Test: Twig Syntax{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        {% block stylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+        {% endblock %}
+    </head>
+    <body>
+
+        <h1>Test Twig</h1>
+
+        {# Questo è un commento Twig #}
+
+        <h2>1. Variabili</h2>
+
+            {# Per chiamare una variabile il cui valore verrà presa dal Controller#}
+            <p>Nome: {{ nome }}</p>
+
+        <h2>2. Condizione</h2>
+
+            {# Per creare una condizione #}
+            {% if attivo %}
+            
+                <p>La variabile "attivo" è vera</p>
+            
+            {% else %}
+
+                <p>La variabile "attivo" è falsa</p>
+            
+            {% endif %}
+            
+        <h2>3. Cicli</h2>
+
+            {# Per fare un foreach() #}
+            <ul>
+            {% for elemento in lista %}
+                <li>{{ elemento }}</li>
+            {% endfor %}
+            </ul>
+
+        <h2>4. Filtri</h2>
+
+            {# La | serve ad applicare un filtro #} 
+            {# "Prendi la data di oggi e formattala" #} 
+            <p>Data di oggi: {{ "now"|date("d/m/Y") }}</p>
+
+        <h2>5. Includes</h2>
+
+            {# Per fare un include #}
+            {% include "prove/sintassi/include_test.html.twig" %}
+        
+    </body>
+</html>

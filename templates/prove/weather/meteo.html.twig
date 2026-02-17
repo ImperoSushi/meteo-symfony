@@ -1,0 +1,77 @@
+{% extends 'prove/layout.html.twig' %}
+
+{% block title %}Meteo{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('weather/favorites.js') }}" defer></script>
+    <script src="{{ asset('weather/meteo.js') }}" defer></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js" defer></script>
+    <script src="{{ asset('weather/map.js') }}" defer></script>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('weather/meteo.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+{% endblock %}
+
+{% block body %}
+
+<h1>Controllo Meteo</h1>
+
+
+<form id="form" method="GET">
+    <label for="city">Inserisci il nome di una città:</label><br>
+    <input id="city" type="text" name="city" placeholder="Cerca città..">
+
+    <button type="submit">Invia</button>
+    <button type="reset">Cancella</button>
+    <button id="toggle-favorites" type="button">⭐ Mostra Preferiti</button>
+</form>
+
+
+<div id="favorites-box">
+    <h3>I tuoi preferiti</h3>
+    <ul id="favorites-list"></ul>
+</div>
+
+<div id="weather-result">
+
+    <div id="city-header">
+        <span id="favorite-star" title="Aggiungi ai preferiti">⭐</span>
+        <div class="city-text">
+            <h2 id="city-name"></h2>
+            <span id="country"></span>
+        </div>
+    </div>
+
+    <h2 id="error"></h2>
+
+    <div class="weather-table">
+        <div class="row">
+            <span class="label">Latitudine:</span>
+            <span id="lat" class="value"></span>
+        </div>
+
+        <div class="row">
+            <span class="label">Longitudine:</span>
+            <span id="lon" class="value"></span>
+        </div>
+
+        <div class="row">
+            <span class="label">Temperatura:</span>
+            <span id="temp" class="value"></span>
+        </div>
+
+        <div class="row">
+            <span class="label">Condizioni:</span>
+            <span id="desc" class="value"></span>
+        </div>
+    </div>
+
+    <br>
+
+    <div id="map" style="width: 100%; height: 300px; display: none;"></div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+
+{% extends '/prove/layout.html.twig' %}
+
+{% block title %}
+    Prove con Twig
+{% endblock %}
+
+{% block body %}
+
+    <h1>Contenuto della pagina</h1>
+    <p>La struttura di questa pagina è stata ereditata da layout.html.twig<p>
+
+      
+    {% block ul %}
+        <h2>Lista non ordinata:</h2>  
+            <ul>
+                {% for elemento in lista %}
+                    <li>{{ elemento }}</li>
+                {% endfor %}
+            </ul>
+    {% endblock %}
+
+    
+
+
+{% endblock %}
+
+

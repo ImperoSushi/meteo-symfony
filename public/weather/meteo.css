@@ -1,0 +1,331 @@
+/* ====== RESET DI BASE ====== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ====== STRUTTURA GENERALE ====== */
+body {
+    background: linear-gradient(135deg, #87CEEB, #4682B4);
+    min-height: 100vh;
+    padding: 40px 20px;
+    color: #fff;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.2rem;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+/* ====== NAV ====== */
+nav {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(6px);
+    padding: 12px 25px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: 0.2s ease-in-out;
+}
+
+nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* ====== FORM ====== */
+form {
+    max-width: 450px;
+    margin: 0 auto 40px auto;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+label {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin: 12px 0 20px 0;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    font-size: 1rem;
+}
+
+button {
+    padding: 10px 18px;
+    margin-right: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s ease-in-out;
+}
+
+button[type="submit"] {
+    background-color: #2E8B57;
+    color: white;
+}
+
+button[type="submit"]:hover {
+    background-color: #3CB371;
+}
+
+button[type="reset"] {
+    background-color: #B22222;
+    color: white;
+}
+
+button[type="reset"]:hover {
+    background-color: #DC143C;
+}
+
+/* ====== PULSANTE MOSTRA/NASCONDI PREFERITI ====== */
+#toggle-favorites {
+    padding: 10px 18px;
+    background-color: white;
+    color: #000;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: 0.2s ease-in-out;
+}
+
+#toggle-favorites:hover {
+    background-color: #FFEA70;
+}
+
+/* ====== BOX PREFERITI ====== */
+#favorites-box {
+    display: none;
+    max-width: 500px;
+    margin: 0 auto 20px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 12px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+#favorites-box h3 {
+    margin-bottom: 10px;
+}
+
+#favorites-list {
+    list-style: none;
+    margin-top: 10px;
+}
+
+#favorites-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.fav-city {
+    /* prende tutto lo spazio disponibile */
+    flex: 1; 
+}
+
+.fav-temp {
+    width: 60px; /* colonna temperatura */
+    text-align: right;
+    font-weight: bold;
+    margin-right: 10px;
+    font-weight: bold;;
+}
+
+.delete-fav {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #B22222;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    pointer-events: auto;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0;
+}
+
+#favorites-list li:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+.delete-fav:hover {
+    background: #DC143C;
+}
+
+/* ====== RISULTATI METEO ====== */
+#weather-result {
+    display: none;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 12px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+#city-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.city-text {
+    display: flex;
+    flex-direction: column;
+}
+
+#city-name {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+#country {
+    font-size: 1rem;
+    opacity: 0.8;
+    margin-top: 2px;
+}
+
+.weather-table {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+}
+
+.label {
+    font-weight: bold;
+    opacity: 0.9;
+}
+
+.value {
+    font-weight: 600;
+}
+
+/* ====== STELLA PREFERITI ====== */
+#favorite-star {
+    cursor: pointer;
+    font-size: 26px;
+    display: none;
+    margin-top: 4px;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+#favorite-star:hover {
+    transform: scale(1.2);
+    color: gold;
+}
+
+/* Errore */
+#error {
+    color: #ffdddd;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 900px) {
+    body {
+        padding: 30px 15px;
+    }
+
+    nav {
+        padding: 12px 15px;
+    }
+
+    nav ul {
+        gap: 12px;
+    }
+
+    h1 {
+        font-size: 1.9rem;
+    }
+}
+
+@media (max-width: 600px) {
+
+    nav {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    form {
+        padding: 20px;
+    }
+
+    button {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    #weather-result {
+        padding: 20px;
+    }
+
+    #weather-result p {
+        font-size: 1rem;
+    }
+}

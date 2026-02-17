@@ -1,0 +1,39 @@
+{% extends 'prove/layout.html.twig' %}
+
+{% block title %}Lista{% endblock %}
+
+{% block javascripts %}
+    <script src="list/lista.js" defer></script>
+{% endblock %}
+
+{% block body %}
+
+<form id="form">
+
+    <label>Nome della lista:</label><br>
+    <input type="text" id="listName"><br><br>
+
+    <h3>Ingredienti disponibili:</h3>
+
+    <ul id="lista" style="list-style: none; padding: 0">
+    
+    {# Creare i checkbox tramite un foreach #}
+        {% for key, val in ingredients %}
+            <li><label><input type="checkbox" class="ingredient" value="{{ key }}"> {{ val }}</label></li>
+        {% endfor %}
+
+        
+    </ul>
+
+    <button type="submit" id="invia">Invia selezionati</button>
+    <button type="reset">Cancella</button>
+    <br>
+</form>
+
+<div>
+
+    <p id="risposta"></p>
+
+</div>
+
+{% endblock %}
