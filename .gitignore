@@ -9,10 +9,3 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-/vendor/
-/var/
-/node_modules/
-.env.local
-.env.*.local
-/.idea/
-/.vscode/

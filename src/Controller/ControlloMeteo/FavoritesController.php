@@ -29,7 +29,7 @@ class FavoritesController extends AbstractController
             ':lat' => $data['latitude'],
             ':lon' => $data['longitude'],
             ':temperature' => $data['temperature'],
-            ':description' => $data['description']
+            ':description' => $data['description'],
         ]);
 
         return new JsonResponse(['status' => 'ok']);
@@ -68,7 +68,7 @@ class FavoritesController extends AbstractController
         if (!isset($data['id'], $data['temperature'], $data['description'])) {
             return new JsonResponse([
                 'success' => false,
-                'error' => 'Dati mancanti'
+                'error' => 'Dati mancanti',
             ], 400);
         }
 
@@ -84,7 +84,7 @@ class FavoritesController extends AbstractController
         $stmt->execute([
             ':temperature' => $data['temperature'],
             ':description' => $data['description'],
-            ':id' => $data['id']
+            ':id' => $data['id'],
         ]);
 
         return new JsonResponse(['success' => true]);
