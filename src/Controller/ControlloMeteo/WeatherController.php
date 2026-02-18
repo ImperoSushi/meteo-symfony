@@ -75,7 +75,7 @@ class WeatherController extends AbstractController
             86 => "Rovesci di neve forti 🌨️❄️",
             95 => "Temporale ⛈️",
             96 => "Temporale con grandine leggera ⛈️🌨️",
-            99 => "Temporale con grandine forte ⛈️❄️"
+            99 => "Temporale con grandine forte ⛈️❄️",
         ];
   
         $description = $weatherCodes[$weather['weathercode']] ?? "Condizione sconosciuta";
@@ -83,10 +83,10 @@ class WeatherController extends AbstractController
         return $this->json([
             'city' => ucfirst($city),
             'country' => ucfirst($country),
-            'temperature' => $weather['temperature'],
+            'temperature' => round($weather['temperature']),
             'description' => $description,
             'latitude' => $lat,
-            'longitude' => $lon
+            'longitude' => $lon,
         ]);
     }
 }
