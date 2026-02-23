@@ -28,6 +28,7 @@ function loadFavorites() {
                 .then(data => {
                     if (!data.error) {
                         tempSpan.textContent = data.temperature + "°C";
+                        updateFavorite(fav.id, data.temperature, fav.description);
                     }
                 });
 
@@ -37,7 +38,7 @@ function loadFavorites() {
                     fillForm({
                         city: fav.city,
                         country: fav.country,
-                        temperature: tempSpan.textContent.replace("°C", ""),
+                        temperature: fav.temperature,
                         description: fav.description,
                         latitude: fav.latitude,
                         longitude: fav.longitude
@@ -81,6 +82,20 @@ function addFavorite(city, country, lat, lon) {
         })
     }).then(() => loadFavorites());
 }
+
+function updateFavorite(id, temperature, description) {
+    fetch('/favorites/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            id,
+            temperature,
+            description
+        })
+    });
+}
+
+
 
 function deleteFavorite(id) {
     fetch(`/favorites/delete/${id}`, { method: 'DELETE' })

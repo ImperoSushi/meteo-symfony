@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class FavoritesController extends AbstractController
 {
-    // ==== ADD ==== 
+    // ==== CREATE ==== 
     #[Route('/favorites/add', methods: ['POST'])]
     public function add(Request $request, Database $db): JsonResponse
     {
@@ -35,19 +35,7 @@ class FavoritesController extends AbstractController
         return new JsonResponse(['status' => 'ok']);
     }
 
-    // ==== DELETE ==== 
-    #[Route('/favorites/delete/{id}', methods: ['DELETE'])]
-    public function delete(int $id, Database $db): JsonResponse
-    {
-        $pdo = $db->write();
-
-        $stmt = $pdo->prepare("DELETE FROM favorite_cities WHERE id = :id;");
-        $stmt->execute([':id' => $id]);
-
-        return new JsonResponse(['status' => 'deleted']);
-    }
-
-    // ==== SELECT ==== 
+    // ==== READ ==== 
     #[Route('/favorites/list', methods: ['GET'])]
     public function list(Database $db): JsonResponse
     {
@@ -73,6 +61,8 @@ class FavoritesController extends AbstractController
         }
 
         $pdo = $db->write();
+        
+        error_log("UPDATE: id={$data['id']} temp={$data['temperature']} desc={$data['description']}");
 
         $stmt = $pdo->prepare("
             UPDATE favorite_cities
@@ -89,4 +79,18 @@ class FavoritesController extends AbstractController
 
         return new JsonResponse(['success' => true]);
     }
+
+    // ==== DELETE ==== 
+    #[Route('/favorites/delete/{id}', methods: ['DELETE'])]
+    public function delete(int $id, Database $db): JsonResponse
+    {
+        $pdo = $db->write();
+        
+        $stmt = $pdo->prepare("DELETE FROM favorite_cities WHERE id = :id;");
+        $stmt->execute([':id' => $id]);
+        
+        return new JsonResponse(['status' => 'deleted']);
+    }
+
+    
 }

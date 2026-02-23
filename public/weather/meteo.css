@@ -134,7 +134,7 @@ button[type="reset"]:hover {
     background: rgba(255, 255, 255, 0.18);
     border-radius: 12px;
     backdrop-filter: blur(6px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);    
 }
 
 #favorites-box h3 {
@@ -162,8 +162,9 @@ button[type="reset"]:hover {
     flex: 1; 
 }
 
+/* colonna temperatura */
 .fav-temp {
-    width: 60px; /* colonna temperatura */
+    width: 60px; 
     text-align: right;
     font-weight: bold;
     margin-right: 10px;
