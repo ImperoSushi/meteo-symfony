@@ -27,10 +27,16 @@ function loadFavorites() {
                 .then(res => res.json())
                 .then(data => {
                     if (!data.error) {
+
                         tempSpan.textContent = data.temperature + "°C";
+
+                        fav.temperature = data.temperature;
+                        fav.description = data.description;
+
                         updateFavorite(fav.id, fav.temperature, fav.description);
                     }
                 });
+
 
                 li.addEventListener('click', () => {
                     hideError();
@@ -94,8 +100,6 @@ function updateFavorite(id, temperature, description) {
         })
     });
 }
-
-
 
 function deleteFavorite(id) {
     fetch(`/favorites/delete/${id}`, { method: 'DELETE' })
