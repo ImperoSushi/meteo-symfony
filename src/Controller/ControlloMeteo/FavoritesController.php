@@ -91,6 +91,5 @@ class FavoritesController extends AbstractController
         
         return new JsonResponse(['status' => 'deleted']);
     }
-
     
 }

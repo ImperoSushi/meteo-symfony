@@ -20,13 +20,17 @@
 
 
 <form id="form" method="GET">
-    <label for="city">Inserisci il nome di una città:</label><br>
-    <input id="city" type="text" name="city" placeholder="Cerca città..">
+    <div class="input-wrapper">
+        <label for="city">Inserisci il nome di una città:</label>
+        <input id="city" type="text" name="city" placeholder="Cerca città.." autocomplete="off">
+        <div id="suggestions"></div>
+    </div>
 
     <button type="submit">Invia</button>
     <button type="reset">Cancella</button>
     <button id="toggle-favorites" type="button">⭐ Mostra Preferiti</button>
 </form>
+
 
 <div id="favorites-box">
     <h3>I tuoi preferiti</h3>
