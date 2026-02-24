@@ -28,7 +28,7 @@ function loadFavorites() {
                 .then(data => {
                     if (!data.error) {
                         tempSpan.textContent = data.temperature + "°C";
-                        updateFavorite(fav.id, data.temperature, fav.description);
+                        updateFavorite(fav.id, fav.temperature, fav.description);
                     }
                 });
 
