@@ -17,36 +17,48 @@ class WeatherController extends AbstractController
         return $this->render('prove/weather/meteo.html.twig');
     }
 
-    // API
     #[Route('/meteo/api', name: 'app_meteo_api', methods: ['POST'])]
     public function meteoApi(Request $request, HttpClientInterface $client): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
+
         $city = $data['city'] ?? null;
+        $lat  = $data['lat'] ?? null;
+        $lon  = $data['lon'] ?? null;
+        $country = $data['country'] ?? null;
 
         if (!$city) {
             return $this->json(['error' => 'Nessuna città inserita']);
-        } elseif (strlen($city) > 20) {
-            $city = substr($city, 0, 20);  
         }
 
-        $geoUrl = "https://geocoding-api.open-meteo.com/v1/search?name={$city}&count=1&language=it&format=json";
-        $geoData = $client->request('GET', $geoUrl)->toArray();
+        if ($lat && $lon) {
+            $latitude = (float)$lat;
+            $longitude = (float)$lon;
+        } else {
+            if (strlen($city) > 20) {
+                $city = substr($city, 0, 20);
+            }
 
-        if (empty($geoData['results'])) {
-            return $this->json(['error' => 'Città non trovata']);
+            $geoUrl = "https://geocoding-api.open-meteo.com/v1/search?name={$city}&count=1&language=it&format=json";
+            $geoData = $client->request('GET', $geoUrl)->toArray();
+
+            if (empty($geoData['results'])) {
+                return $this->json(['error' => 'Città non trovata']);
+            }
+
+            $result = $geoData['results'][0];
+
+            $country = $result['country'] ?? "Sconosciuto";
+            $latitude = $result['latitude'];
+            $longitude = $result['longitude'];
         }
 
-        $country = $geoData['results'][0]['country'];
-        $lat = $geoData['results'][0]['latitude'];
-        $lon = $geoData['results'][0]['longitude'];
-
-        
-        $weatherUrl = "https://api.open-meteo.com/v1/forecast?latitude={$lat}&longitude={$lon}&current_weather=true";
+        // Meteo
+        $weatherUrl = "https://api.open-meteo.com/v1/forecast?latitude={$latitude}&longitude={$longitude}&current_weather=true";
         $weatherData = $client->request('GET', $weatherUrl)->toArray();
 
         $weather = $weatherData['current_weather'];
-        
+
         $weatherCodes = [
             0  => "Cielo sereno ☀️",
             1  => "Prevalentemente sereno 🌤️",
@@ -77,22 +89,16 @@ class WeatherController extends AbstractController
             96 => "Temporale con grandine leggera ⛈️🌨️",
             99 => "Temporale con grandine forte ⛈️❄️",
         ];
-  
+
         $description = $weatherCodes[$weather['weathercode']] ?? "Condizione sconosciuta";
-        
+
         return $this->json([
             'city' => ucfirst($city),
             'country' => ucfirst($country),
             'temperature' => round($weather['temperature']),
             'description' => $description,
-            'latitude' => $lat,
-            'longitude' => $lon,
+            'latitude' => $latitude,
+            'longitude' => $longitude,
         ]);
     }
 }
-
-
-
-
-
-

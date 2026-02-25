@@ -18,6 +18,10 @@ const el = {
 let suggestionTimeout = null;
 
 el.cityInput.addEventListener("input", () => {
+    el.cityInput.dataset.lat = "";
+    el.cityInput.dataset.lon = "";
+    el.cityInput.dataset.country = "";
+
     const query = el.cityInput.value.trim();
 
     if (query.length < 2) {
@@ -33,7 +37,6 @@ el.cityInput.addEventListener("input", () => {
             .then(async res => {
                 const text = await res.text();
 
-                // Se la risposta NON è JSON → evita il crash
                 if (!text.startsWith("{")) {                
                     el.suggestions.style.display = "none";          
 
@@ -94,7 +97,14 @@ el.cityInput.addEventListener("input", () => {
 
                     item.addEventListener("click", () => {
                         el.cityInput.value = city.name;
+                        el.cityInput.dataset.lat = city.latitude;
+                        el.cityInput.dataset.lon = city.longitude;
+                        el.cityInput.dataset.country = city.country;
+
                         el.suggestions.style.display = "none";
+
+                        el.cityInput.blur(); 
+                        el.cityInput.focus();
                     });
 
                     el.suggestions.appendChild(item);
@@ -108,8 +118,8 @@ el.cityInput.addEventListener("input", () => {
 // --- FORM SUBMIT ---
 
 el.form.addEventListener('submit', function(e) {
-    weatherFun(e);
     el.suggestions.style.display = "none";
+    weatherFun(e);
 });
 el.form.addEventListener('reset', function(e) {
     e.preventDefault();
@@ -137,7 +147,12 @@ function weatherFun(e) {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
-        body: JSON.stringify({ city })
+        body: JSON.stringify({
+            city,
+            lat: el.cityInput.dataset.lat,
+            lon: el.cityInput.dataset.lon,
+            country: el.cityInput.dataset.country
+        })
     })
     .then(async res => {
         const text = await res.text();
