@@ -7,6 +7,9 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/doctrine-bundle": "^2.18",
+        "doctrine/doctrine-migrations-bundle": "^3.7",
+        "doctrine/orm": "^3.6",
         "phpoffice/phpspreadsheet": "^5.4",
         "symfony/apache-pack": "*",
         "symfony/asset": "7.4.*",
@@ -17,6 +20,7 @@
         "symfony/http-client": "7.4.*",
         "symfony/mime": "7.4.*",
         "symfony/runtime": "7.4.*",
+        "symfony/security-bundle": "7.4.*",
         "symfony/twig-bundle": "7.4.*",
         "symfony/yaml": "7.4.*",
         "twig/extra-bundle": "^2.12|^3.0",
@@ -71,5 +75,8 @@
             "allow-contrib": false,
             "require": "7.4.*"
         }
+    },
+    "require-dev": {
+        "symfony/maker-bundle": "^1.66"
     }
 }
