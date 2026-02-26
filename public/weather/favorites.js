@@ -5,6 +5,17 @@ function loadFavorites() {
             const list = document.getElementById('favorites-list');
             list.innerHTML = '';
 
+            const title = document.getElementById('favorites-title');
+            const excelBtn = document.getElementById('excel-btn');
+
+            if (favorites.length === 0) {
+                title.textContent = 'Nessun preferito';
+                excelBtn.style.display = 'none'; 
+            } else {
+                title.textContent = 'I tuoi preferiti';
+                excelBtn.style.display = 'block';
+            }
+
             favorites.forEach(fav => {
                 const li = document.createElement('li');
 
