@@ -29,7 +29,6 @@ el.cityInput.addEventListener("input", () => {
     } else {
         clearTimeout(suggestionTimeout);
         suggestionTimeout = setTimeout(() => {
-
             fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${query}&language=it&count=10`)
                 .then(async res => {
                     const text = await res.text();
@@ -67,7 +66,7 @@ el.cityInput.addEventListener("input", () => {
 
                     let results = data.results.filter(city =>
                         validTypes.includes(city.feature_code) &&
-                        (city.population ?? 0) > 75 &&
+                        (city.population ?? 0) > 100 &&
                         city.country && city.country.trim() !== ""   
                     );
 
@@ -78,8 +77,6 @@ el.cityInput.addEventListener("input", () => {
                     if (results.length === 0) {
                         el.suggestions.style.display = "none";
                     } else {
-
-                        // --- MOSTRA SUGGERIMENTI ---
                         el.suggestions.innerHTML = "";
                         el.suggestions.style.display = "block";
 
@@ -206,7 +203,9 @@ function fillForm(data) {
             data.city,
             data.country,
             data.latitude,
-            data.longitude
+            data.longitude,
+            data.temperature,
+            data.description
         );
     };
 }

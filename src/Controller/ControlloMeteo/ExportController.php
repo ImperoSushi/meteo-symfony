@@ -17,7 +17,10 @@ class ExportController extends AbstractController
         $stmt = $pdo->query("SELECT city, country, latitude, longitude, temperature, description FROM favorite_cities");
         $excelData = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        $filename = $excelService->createExcel('preferiti_', $excelData);
+        $filename = $excelService->createExcel(
+            'preferiti_' . date('d-m-Y') . '_',
+            $excelData
+        );
 
         return $this->file($filename);
     }

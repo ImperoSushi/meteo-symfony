@@ -90,6 +90,5 @@ class FavoritesController extends AbstractController
         $stmt->execute([':id' => $id]);
         
         return new JsonResponse(['status' => 'deleted']);
-    }
-    
+    }    
 }

@@ -1,85 +1,85 @@
 // --- LOAD ---
 function loadFavorites() {
     fetch('/favorites/list')
-        .then(res => res.json())
-        .then(favorites => {
-            const list = document.getElementById('favorites-list');
-            list.innerHTML = '';
+    .then(res => res.json())
+    .then(favorites => {
+        const list = document.getElementById('favorites-list');
+        list.innerHTML = '';
 
-            const title = document.getElementById('favorites-title');
-            const excelBtn = document.getElementById('excel-btn');
+        const title = document.getElementById('favorites-title');
+        const excelBtn = document.getElementById('excel-btn');
 
-            if (favorites.length === 0) {
-                title.textContent = 'Nessun preferito';
-                excelBtn.style.display = 'none'; 
-            } else {
-                title.textContent = 'I tuoi preferiti';
-                excelBtn.style.display = 'block';
-            }
+        if (favorites.length === 0) {
+            title.textContent = 'Nessun preferito';
+            excelBtn.style.display = 'none'; 
+        } else {
+            title.textContent = 'I tuoi preferiti';
+            excelBtn.style.display = 'block';
+        }
 
-            favorites.forEach(fav => {
-                const li = document.createElement('li');
+        favorites.forEach(fav => {
+            const li = document.createElement('li');
 
-                li.innerHTML = `
-                    <span class="fav-city"><strong>${fav.city} (${fav.country})</strong></span>
-                    <span class="fav-temp">${fav.temperature ?? '--'}°C</span>
-                    <button class="delete-fav" data-id="${fav.id}">X</button>
-                `;
+            li.innerHTML = `
+                <span class="fav-city"><strong>${fav.city} (${fav.country})</strong></span>
+                <span class="fav-temp">${fav.temperature ?? '--'}°C</span>
+                <button class="delete-fav" data-id="${fav.id}">X</button>
+            `;
 
-                const tempSpan = li.querySelector('.fav-temp');
+            const tempSpan = li.querySelector('.fav-temp');
 
-                fetch('/meteo/api', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ city: fav.city })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (!data.error) {
+            fetch('/meteo/api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ city: fav.city })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.error) {
 
-                        tempSpan.textContent = data.temperature + "°C";
+                    tempSpan.textContent = data.temperature + "°C";
 
-                        fav.temperature = data.temperature;
-                        fav.description = data.description;
+                    fav.temperature = data.temperature;
+                    fav.description = data.description;
 
-                        updateFavorite(fav.id, fav.temperature, fav.description);
-                    }
-                });
-
-                li.addEventListener('click', () => {
-                    hideError();
-
-                    fillForm({
-                        city: fav.city,
-                        country: fav.country,
-                        temperature: fav.temperature,
-                        description: fav.description,
-                        latitude: fav.latitude,
-                        longitude: fav.longitude
-                    });
-
-                    updateMap(fav.latitude, fav.longitude);
-                    document.getElementById("weather-result").style.display = "block";
-
-                    // Scroll automatico verso il risultato
-                    document.getElementById("weather-result").scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
-                    });
-                });
-
-                li.querySelector('.delete-fav').addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    deleteFavorite(fav.id);
-                });
-
-                list.appendChild(li);
+                    updateFavorite(fav.id, fav.temperature, fav.description);
+                }
             });
+
+            li.addEventListener('click', () => {
+                hideError();
+
+                fillForm({
+                    city: fav.city,
+                    country: fav.country,
+                    temperature: fav.temperature,
+                    description: fav.description,
+                    latitude: fav.latitude,
+                    longitude: fav.longitude
+                });
+
+                updateMap(fav.latitude, fav.longitude);
+                document.getElementById("weather-result").style.display = "block";
+
+                // Scroll automatico verso il risultato
+                document.getElementById("weather-result").scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+            });
+
+            li.querySelector('.delete-fav').addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteFavorite(fav.id);
+            });
+
+            list.appendChild(li);
         });
-}
+    });       
+}    
 
 // --- ADD ---
 function addFavorite(city, country, lat, lon) {
@@ -120,7 +120,7 @@ function deleteFavorite(id) {
         .then(() => loadFavorites());
 }
 
-/* ---FAVORITES --- */
+// ---FAVORITES --- 
 document.addEventListener("DOMContentLoaded", () => {
     loadFavorites();
 

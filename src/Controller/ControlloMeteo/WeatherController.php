@@ -30,15 +30,15 @@ class WeatherController extends AbstractController
         if (!$city) {
             return $this->json(['error' => 'Nessuna città inserita']);
         }
+        
+        if (strlen($city) > 20) {
+            $city = substr($city, 0, 20);
+        }
 
         if ($lat && $lon) {
             $latitude = (float)$lat;
             $longitude = (float)$lon;
         } else {
-            if (strlen($city) > 20) {
-                $city = substr($city, 0, 20);
-            }
-
             $geoUrl = "https://geocoding-api.open-meteo.com/v1/search?name={$city}&count=1&language=it&format=json";
             $geoData = $client->request('GET', $geoUrl)->toArray();
 
