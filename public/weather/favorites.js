@@ -1,3 +1,4 @@
+// --- LOAD ---
 function loadFavorites() {
     fetch('/favorites/list')
         .then(res => res.json())
@@ -48,7 +49,6 @@ function loadFavorites() {
                     }
                 });
 
-
                 li.addEventListener('click', () => {
                     hideError();
 
@@ -81,6 +81,7 @@ function loadFavorites() {
         });
 }
 
+// --- ADD ---
 function addFavorite(city, country, lat, lon) {
 
     const temperature = document.getElementById("temp").textContent.replace("°C", "");
@@ -100,6 +101,7 @@ function addFavorite(city, country, lat, lon) {
     }).then(() => loadFavorites());
 }
 
+// --- UPDATE ---
 function updateFavorite(id, temperature, description) {
     fetch('/favorites/update', {
         method: 'POST',
@@ -112,12 +114,13 @@ function updateFavorite(id, temperature, description) {
     });
 }
 
+// --- DELETE ---
 function deleteFavorite(id) {
     fetch(`/favorites/delete/${id}`, { method: 'DELETE' })
         .then(() => loadFavorites());
 }
 
-/* ⭐ MOSTRA/NASCONDI PREFERITI */
+/* ---FAVORITES --- */
 document.addEventListener("DOMContentLoaded", () => {
     loadFavorites();
 

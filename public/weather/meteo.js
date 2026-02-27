@@ -26,92 +26,87 @@ el.cityInput.addEventListener("input", () => {
 
     if (query.length < 2) {
         el.suggestions.style.display = "none";
+    } else {
+        clearTimeout(suggestionTimeout);
+        suggestionTimeout = setTimeout(() => {
 
-        return;
-    }
+            fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${query}&language=it&count=10`)
+                .then(async res => {
+                    const text = await res.text();
 
-    clearTimeout(suggestionTimeout);
-    suggestionTimeout = setTimeout(() => {
+                    if (!text.startsWith("{")) {                
+                        el.suggestions.style.display = "none";          
 
-        fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${query}&language=it&count=10`)
-            .then(async res => {
-                const text = await res.text();
+                        return { results: [] };
+                    }
 
-                if (!text.startsWith("{")) {                
-                    el.suggestions.style.display = "none";          
+                    return JSON.parse(text);
+                })
+                .then(data => {
 
-                    return { results: [] };
-                }
-
-                return JSON.parse(text);
-            })
-            .then(data => {
-
-                if (!data.results) {
-                    el.suggestions.style.display = "none";
-
-                    return;
-                }
-
-                // --- FILTRI IMPORTANTI ---
-                const validTypes = ["PPL", "PPLA", "PPLA2", "PPLC"];
-                /*
-                    Codice                   Significato                                     
-                    PPL	  | Populated Place	                               | Una città o paese normale
-                    PPLA  |	Seat of a first‑order administrative division  | Capoluogo di regione / provincia
-                    PPLA2 |	Seat of a second‑order division	               | Capoluogo di una provincia più piccola
-                    PPLA3 |	Seat of a third‑order division	               | Capoluogo di distretto
-                    PPLC  |	Capital of a country	                       | Capitale nazionale (Roma, Parigi, Tokyo…)
-                    PPLX  |	Section of a populated place	               | Quartiere o frazione
-                    PPLF  |	Farm village	                               | Villaggio rurale
-                    PPLG  |	Seat of government	                           | Sede del governo
-                    PPLH  |	Historical place	                           | Città storica non più abitata
-                */
-
-                let results = data.results.filter(city =>
-                    validTypes.includes(city.feature_code) &&
-                    (city.population ?? 0) > 75 &&
-                    city.country && city.country.trim() !== ""   
-                );
-
-                results.sort((a, b) => (b.population ?? 0) - (a.population ?? 0));
-
-                results = results.slice(0, 4);
-
-                if (results.length === 0) {
-                    el.suggestions.style.display = "none";
-
-                    return;
-                }
-
-                // --- MOSTRA SUGGERIMENTI ---
-                el.suggestions.innerHTML = "";
-                el.suggestions.style.display = "block";
-
-
-                results.forEach(city => {
-                    const item = document.createElement("div");
-                    item.classList.add("suggestion-item");
-
-                    item.textContent = `${city.name}, ${city.country}`;
-
-                    item.addEventListener("click", () => {
-                        el.cityInput.value = city.name;
-                        el.cityInput.dataset.lat = city.latitude;
-                        el.cityInput.dataset.lon = city.longitude;
-                        el.cityInput.dataset.country = city.country;
-
+                    if (!data.results) {
                         el.suggestions.style.display = "none";
 
-                        el.cityInput.blur(); 
-                        el.cityInput.focus();
-                    });
+                        return;
+                    }
 
-                    el.suggestions.appendChild(item);
-                });
+                    // --- FILTRI IMPORTANTI ---
+                    const validTypes = ["PPL", "PPLA", "PPLA2", "PPLC"];
+                    /*
+                        Codice                   Significato                                    Cosa Indica                
+                        PPL	  | Populated Place	                               | Una città o paese normale
+                        PPLA  |	Seat of a first‑order administrative division  | Capoluogo di regione / provincia
+                        PPLA2 |	Seat of a second‑order division	               | Capoluogo di una provincia più piccola
+                        PPLA3 |	Seat of a third‑order division	               | Capoluogo di distretto
+                        PPLC  |	Capital of a country	                       | Capitale nazionale (Roma, Parigi, Tokyo…)
+                        PPLX  |	Section of a populated place	               | Quartiere o frazione
+                        PPLF  |	Farm village	                               | Villaggio rurale
+                        PPLG  |	Seat of government	                           | Sede del governo
+                        PPLH  |	Historical place	                           | Città storica non più abitata
+                    */
+
+                    let results = data.results.filter(city =>
+                        validTypes.includes(city.feature_code) &&
+                        (city.population ?? 0) > 75 &&
+                        city.country && city.country.trim() !== ""   
+                    );
+
+                    results.sort((a, b) => (b.population ?? 0) - (a.population ?? 0));
+
+                    results = results.slice(0, 4);
+
+                    if (results.length === 0) {
+                        el.suggestions.style.display = "none";
+                    } else {
+
+                        // --- MOSTRA SUGGERIMENTI ---
+                        el.suggestions.innerHTML = "";
+                        el.suggestions.style.display = "block";
+
+                        results.forEach(city => {
+                            const item = document.createElement("div");
+                            item.classList.add("suggestion-item");
+
+                            item.textContent = `${city.name}, ${city.country}`;
+
+                            item.addEventListener("click", () => {
+                                el.cityInput.value = city.name;
+                                el.cityInput.dataset.lat = city.latitude;
+                                el.cityInput.dataset.lon = city.longitude;
+                                el.cityInput.dataset.country = city.country;
+
+                                el.suggestions.style.display = "none";
+
+                                el.cityInput.blur(); 
+                                el.cityInput.focus();
+                            });
+
+                            el.suggestions.appendChild(item);
+                        });
+                    }
             });
-
-    }, 250);
+        }, 250);
+    }
 });
 
 
