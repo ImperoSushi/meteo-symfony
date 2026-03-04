@@ -2,6 +2,8 @@
 
 namespace App\Controller\ControlloMeteo;
 
+use App\Entity\FavoriteCity;
+use App\Repository\FavoriteCityRepository;
 use App\Service\ManageExcel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,12 +12,20 @@ use Symfony\Component\Routing\Attribute\Route;
 class ExportController extends AbstractController
 {
     #[Route('/export/excel', name: 'export_excel')]
-    public function exportExcel(ManageExcel $excelService): Response
+    public function exportExcel(FavoriteCityRepository $repo, ManageExcel $excelService): Response
     {
-        $pdo = new \PDO("mysql:host=localhost;dbname=weather", "weather_read", "extark2025");
+        $favorites = $repo->findAll();
 
-        $stmt = $pdo->query("SELECT city, country, latitude, longitude, temperature, description FROM favorite_cities");
-        $excelData = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $excelData = array_map(function(FavoriteCity $fav) {
+            return [
+                'city' => $fav->getCity(),
+                'country' => $fav->getCountry(),
+                'latitude' => $fav->getLatitude(),
+                'longitude' => $fav->getLongitude(),
+                'temperature' => $fav->getTemperature(),
+                'description' => $fav->getDescription(),
+            ];
+        }, $favorites);
 
         $filename = $excelService->createExcel(
             'preferiti_' . date('d-m-Y') . '_',

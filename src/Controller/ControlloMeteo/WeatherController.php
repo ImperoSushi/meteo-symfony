@@ -11,6 +11,12 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class WeatherController extends AbstractController
 {
+    // URL base delle API 
+    private const GEO_API = 'https://geocoding-api.open-meteo.com/v1';
+    private const GEO_SEARCH = '/search?count=1&language=it&format=json';
+    private const METEO_API = 'https://api.open-meteo.com/v1';
+    private const METEO_FORECAST = '/forecast?current_weather=true';
+
     #[Route('/meteo', name: 'app_meteo', methods: ['GET'])]
     public function meteo(): Response
     {
@@ -22,24 +28,21 @@ class WeatherController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        $city = $data['city'] ?? null;
-        $lat  = $data['lat'] ?? null;
-        $lon  = $data['lon'] ?? null;
+        $city    = $data['city'] ?? null;
+        $lat     = $data['lat'] ?? null;
+        $lon     = $data['lon'] ?? null;
         $country = $data['country'] ?? null;
 
         if (!$city) {
             return $this->json(['error' => 'Nessuna città inserita']);
         }
-        
+
         if (strlen($city) > 20) {
             $city = substr($city, 0, 20);
         }
 
-        if ($lat && $lon) {
-            $latitude = (float)$lat;
-            $longitude = (float)$lon;
-        } else {
-            $geoUrl = "https://geocoding-api.open-meteo.com/v1/search?name={$city}&count=1&language=it&format=json";
+        if (!$lat || !$lon) {
+            $geoUrl = self::GEO_API . self::GEO_SEARCH . "&name={$city}";
             $geoData = $client->request('GET', $geoUrl)->toArray();
 
             if (empty($geoData['results'])) {
@@ -48,13 +51,16 @@ class WeatherController extends AbstractController
 
             $result = $geoData['results'][0];
 
-            $country = $result['country'] ?? "Sconosciuto";
-            $latitude = $result['latitude'];
+            $country   = $result['country'] ?? "Sconosciuto";
+            $latitude  = $result['latitude'];
             $longitude = $result['longitude'];
+        } else {
+            $latitude  = (float)$lat;
+            $longitude = (float)$lon;
         }
 
-        // Meteo
-        $weatherUrl = "https://api.open-meteo.com/v1/forecast?latitude={$latitude}&longitude={$longitude}&current_weather=true";
+        // Richiesta meteo
+        $weatherUrl = self::METEO_API . self::METEO_FORECAST . "&latitude={$latitude}&longitude={$longitude}";
         $weatherData = $client->request('GET', $weatherUrl)->toArray();
 
         $weather = $weatherData['current_weather'];
@@ -93,12 +99,12 @@ class WeatherController extends AbstractController
         $description = $weatherCodes[$weather['weathercode']] ?? "Condizione sconosciuta";
 
         return $this->json([
-            'city' => ucfirst($city),
-            'country' => ucfirst($country),
+            'city'        => ucfirst($city),
+            'country'     => ucfirst($country),
             'temperature' => round($weather['temperature']),
             'description' => $description,
-            'latitude' => $latitude,
-            'longitude' => $longitude,
+            'latitude'    => $latitude,
+            'longitude'   => $longitude,
         ]);
     }
 }

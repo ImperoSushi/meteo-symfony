@@ -2,7 +2,9 @@
 
 namespace App\Controller\ControlloMeteo;
 
-use App\Service\Database;
+use App\Entity\FavoriteCity;
+use App\Repository\FavoriteCityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,85 +12,74 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class FavoritesController extends AbstractController
 {
-    // ==== CREATE ==== 
     #[Route('/favorites/add', methods: ['POST'])]
-    public function add(Request $request, Database $db): JsonResponse
+    public function add(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
-        $pdo = $db->write();
+        $fav = new FavoriteCity();
+        $fav->setCity($data['city']);
+        $fav->setCountry($data['country']);
+        $fav->setLatitude($data['latitude']);
+        $fav->setLongitude($data['longitude']);
+        $fav->setTemperature($data['temperature']);
+        $fav->setDescription($data['description']);
 
-        $stmt = $pdo->prepare("
-            INSERT INTO favorite_cities (city, country, latitude, longitude, temperature, description)
-            VALUES (:city, :country, :lat, :lon, :temperature, :description);
-        ");
-
-        $stmt->execute([
-            ':city' => $data['city'],
-            ':country' => $data['country'],
-            ':lat' => $data['latitude'],
-            ':lon' => $data['longitude'],
-            ':temperature' => $data['temperature'],
-            ':description' => $data['description'],
-        ]);
+        $em->persist($fav);
+        $em->flush();
 
         return new JsonResponse(['status' => 'ok']);
     }
 
-    // ==== READ ==== 
     #[Route('/favorites/list', methods: ['GET'])]
-    public function list(Database $db): JsonResponse
+    public function list(FavoriteCityRepository $repo): JsonResponse
     {
-        $pdo = $db->read();
+        $favorites = $repo->findBy([], ['id' => 'DESC']);
 
-        $stmt = $pdo->query("SELECT * FROM favorite_cities ORDER BY id DESC");
-        $favorites = $stmt->fetchAll();
+        $data = array_map(function(FavoriteCity $fav) {
+            return [
+                'id' => $fav->getId(),
+                'city' => $fav->getCity(),
+                'country' => $fav->getCountry(),
+                'latitude' => $fav->getLatitude(),
+                'longitude' => $fav->getLongitude(),
+                'temperature' => $fav->getTemperature(),
+                'description' => $fav->getDescription(),
+            ];
+        }, $favorites);
 
-        return new JsonResponse($favorites);
+        return new JsonResponse($data);
     }
 
-    // ==== UPDATE ====
     #[Route('/favorites/update', methods: ['POST'])]
-    public function update(Request $request, Database $db): JsonResponse
+    public function update(Request $request, FavoriteCityRepository $repo, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['id'], $data['temperature'], $data['description'])) {
-            return new JsonResponse([
-                'success' => false,
-                'error' => 'Dati mancanti',
-            ], 400);
+        $fav = $repo->find($data['id']);
+        if (!$fav) {
+            return new JsonResponse(['success' => false, 'error' => 'Non trovato'], 404);
         }
 
-        $pdo = $db->write();
-        
-        error_log("UPDATE: id={$data['id']} temp={$data['temperature']} desc={$data['description']}");
+        $fav->setTemperature($data['temperature']);
+        $fav->setDescription($data['description']);
 
-        $stmt = $pdo->prepare("
-            UPDATE favorite_cities
-            SET temperature = :temperature,
-                description = :description
-            WHERE id = :id;
-        ");
-
-        $stmt->execute([
-            ':temperature' => $data['temperature'],
-            ':description' => $data['description'],
-            ':id' => $data['id'],
-        ]);
+        $em->flush();
 
         return new JsonResponse(['success' => true]);
     }
 
-    // ==== DELETE ==== 
     #[Route('/favorites/delete/{id}', methods: ['DELETE'])]
-    public function delete(int $id, Database $db): JsonResponse
+    public function delete(int $id, FavoriteCityRepository $repo, EntityManagerInterface $em): JsonResponse
     {
-        $pdo = $db->write();
-        
-        $stmt = $pdo->prepare("DELETE FROM favorite_cities WHERE id = :id;");
-        $stmt->execute([':id' => $id]);
-        
+        $fav = $repo->find($id);
+        if (!$fav) {
+            return new JsonResponse(['error' => 'Non trovato'], 404);
+        }
+
+        $em->remove($fav);
+        $em->flush();
+
         return new JsonResponse(['status' => 'deleted']);
-    }    
+    }
 }

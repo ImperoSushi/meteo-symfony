@@ -63,11 +63,8 @@ el.cityInput.addEventListener("input", () => {
                         PPLG  |	Seat of government	                           | Sede del governo
                         PPLH  |	Historical place	                           | Città storica non più abitata
                     */
-
-                    let results = data.results.filter(city =>
-                        validTypes.includes(city.feature_code) &&
-                        (city.population ?? 0) > 100 &&
-                        city.country && city.country.trim() !== ""   
+                   let results = data.results.filter(city =>
+                        validTypes.includes(city.feature_code) && (city.population ?? 0) > 100 && city.country && city.country.trim() !== ""   
                     );
 
                     results.sort((a, b) => (b.population ?? 0) - (a.population ?? 0));
@@ -101,7 +98,7 @@ el.cityInput.addEventListener("input", () => {
                             el.suggestions.appendChild(item);
                         });
                     }
-            });
+                });
         }, 250);
     }
 });
@@ -120,6 +117,7 @@ el.form.addEventListener('reset', function(e) {
     el.cityInput.value = "";
     document.getElementById("map").style.display = "none";
 });
+
 
 // --- FUNZIONE PRINCIPALE ---
 
@@ -173,6 +171,7 @@ function weatherFun(e) {
     .catch(err => console.error("Errore: ", err));
 }
 
+
 // --- FUNZIONI DI UTILITÀ ---
 
 function clearForm() {
@@ -184,6 +183,7 @@ function clearForm() {
     el.lon.textContent = "";
     document.getElementById("map").style.display = "none";
     el.favoriteStar.style.display = "none";
+    el.suggestions.style.display = "none";
 }
 
 function fillForm(data) {
