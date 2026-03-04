@@ -25,6 +25,8 @@ class FavoritesController extends AbstractController
         $fav->setTemperature($data['temperature']);
         $fav->setDescription($data['description']);
 
+        $fav->setUser($this->getUser());
+
         $em->persist($fav);
         $em->flush();
 
@@ -34,7 +36,12 @@ class FavoritesController extends AbstractController
     #[Route('/favorites/list', methods: ['GET'])]
     public function list(FavoriteCityRepository $repo): JsonResponse
     {
-        $favorites = $repo->findBy([], ['id' => 'DESC']);
+        $user = $this->getUser();
+
+        $favorites = $repo->findBy(
+            ['user' => $user],
+            ['id' => 'DESC']
+        );
 
         $data = array_map(function(FavoriteCity $fav) {
             return [
@@ -55,9 +62,12 @@ class FavoritesController extends AbstractController
     public function update(Request $request, FavoriteCityRepository $repo, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-
+    
         $fav = $repo->find($data['id']);
-        if (!$fav) {
+
+        if ($fav->getUser() !== $this->getUser()) {
+            return new JsonResponse(['error' => 'Non autorizzato'], 403);
+        } elseif (!$fav) {
             return new JsonResponse(['success' => false, 'error' => 'Non trovato'], 404);
         }
 
@@ -73,7 +83,10 @@ class FavoritesController extends AbstractController
     public function delete(int $id, FavoriteCityRepository $repo, EntityManagerInterface $em): JsonResponse
     {
         $fav = $repo->find($id);
-        if (!$fav) {
+
+        if ($fav->getUser() !== $this->getUser()) {
+            return new JsonResponse(['error' => 'Non autorizzato'], 403);
+        } elseif (!$fav) {
             return new JsonResponse(['error' => 'Non trovato'], 404);
         }
 

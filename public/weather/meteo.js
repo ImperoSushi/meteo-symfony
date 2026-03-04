@@ -67,7 +67,7 @@ el.cityInput.addEventListener("input", () => {
                         validTypes.includes(city.feature_code) && (city.population ?? 0) > 100 && city.country && city.country.trim() !== ""   
                     );
 
-                    results.sort((a, b) => (b.population ?? 0) - (a.population ?? 0));
+                    results.sort((cityA, cityB) => (cityB.population ?? 0) - (cityA.population ?? 0));
 
                     results = results.slice(0, 4);
 

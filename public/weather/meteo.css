@@ -318,6 +318,70 @@ button[type="reset"]:hover {
     margin-bottom: 10px;
 }
 
+
+/* ====== NAV AUTH ====== */
+nav {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(6px);
+    padding: 12px 25px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between; /* spazio tra menu e auth */
+    align-items: center;
+    flex-wrap: wrap; /* permette di andare a capo su mobile */
+    gap: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; /* evita rotture su schermi piccoli */
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: 0.2s ease-in-out;
+}
+
+nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.nav-auth {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap; /* evita overflow */
+}
+
+.nav-user {
+    font-weight: bold;
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+.nav-btn {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.18);
+    transition: 0.2s ease-in-out;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
 /* ====== RESPONSIVE ====== */
 @media (max-width: 900px) {
     body {
@@ -337,6 +401,31 @@ button[type="reset"]:hover {
     }
 
 }
+
+@media (max-width: 700px) {
+    nav {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .nav-auth {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .nav-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
 
 @media (max-width: 600px) {
 
