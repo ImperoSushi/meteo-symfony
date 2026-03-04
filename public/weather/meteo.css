@@ -111,12 +111,12 @@ input[type="text"] {
     border-radius: 8px;
     outline: none;
     font-size: 1rem;
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.678);
     color: #000;
 }
 
 input[type="text"]:focus {
-    background: rgba(255, 255, 255, 0.35);
+    background: rgb(255, 255, 255);
 }
 
 /* ====== BOTTONI ====== */
@@ -230,6 +230,10 @@ button[type="reset"]:hover {
     cursor: pointer;
 }
 
+#favorites-list li:hover {
+    background: rgba(255, 255, 255, 0.200);
+}
+
 .fav-city {
     flex: 1;
 }
@@ -255,6 +259,10 @@ button[type="reset"]:hover {
 
 .delete-fav:hover {
     background: #DC143C;
+}
+
+#excel-btn {
+    color: rgba(255, 255, 255, 0.774);
 }
 
 /* ====== RISULTATI METEO ====== */
