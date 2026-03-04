@@ -2,22 +2,32 @@
 function loadFavorites() {
     fetch('/favorites/list')
     .then(res => res.json())
-    .then(favorites => {
+    .then(data => {
         const list = document.getElementById('favorites-list');
-        list.innerHTML = '';
-
         const title = document.getElementById('favorites-title');
         const excelBtn = document.getElementById('excel-btn');
 
-        if (favorites.length === 0) {
+        list.innerHTML = '';
+
+        // --- utente NON loggato ---
+        if (data.error === "login_required") {
+            title.textContent = "Login necessario";
+            excelBtn.style.display = 'none';
+            return;
+        }
+
+        // --- nessun preferito ---
+        if (data.length === 0) {
             title.textContent = 'Nessun preferito';
-            excelBtn.style.display = 'none'; 
-        } else {
+            excelBtn.style.display = 'none';
+        } 
+        // --- preferiti presenti ---
+        else {
             title.textContent = 'I tuoi preferiti';
             excelBtn.style.display = 'block';
         }
 
-        favorites.forEach(fav => {
+        data.forEach(fav => {
             const li = document.createElement('li');
 
             li.innerHTML = `
@@ -39,7 +49,6 @@ function loadFavorites() {
             .then(res => res.json())
             .then(data => {
                 if (!data.error) {
-
                     tempSpan.textContent = data.temperature + "°C";
 
                     fav.temperature = data.temperature;
@@ -64,7 +73,6 @@ function loadFavorites() {
                 updateMap(fav.latitude, fav.longitude);
                 document.getElementById("weather-result").style.display = "block";
 
-                // Scroll automatico verso il risultato
                 document.getElementById("weather-result").scrollIntoView({
                     behavior: "smooth",
                     block: "start"
@@ -79,7 +87,7 @@ function loadFavorites() {
             list.appendChild(li);
         });
     });       
-}    
+}   
 
 // --- ADD ---
 function addFavorite(city, country, lat, lon) {
@@ -98,7 +106,16 @@ function addFavorite(city, country, lat, lon) {
             temperature,
             description
         })
-    }).then(() => loadFavorites());
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.error === "login_required") {
+            alert("Per aggiungere ai preferiti devi effettuare il login.");
+        } else {
+            loadFavorites();
+        }
+    });
+
 }
 
 // --- UPDATE ---

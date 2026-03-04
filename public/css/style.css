@@ -1,9 +1,211 @@
-.auth-box a {
-    margin-left: 10px;
-    text-decoration: none;
-    color: #007bff;
+/* ====== RESET ====== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-.auth-box a:hover {
+/* ====== SFONDO GENERALE (STESSO BLU METEO) ====== */
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+}
+
+/* ============================================================
+   NAVBAR — IDENTICA AL METEO
+   ============================================================ */
+nav {
+    width: 100%;
+    padding: 15px 25px;
+    background: rgba(255, 255, 255, 0.10);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    box-sizing: border-box;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.nav-auth {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-user {
+    color: white;
+    font-size: 15px;
+}
+
+.nav-btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.20);
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* ============================================================
+   LOGIN & REGISTRAZIONE — GLASSY COERENTE
+   ============================================================ */
+.auth-container {
+    min-height: calc(100vh - 180px); /* spazio per nav */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.auth-box {
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    color: white;
+}
+
+.auth-box h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 26px;
+    font-weight: 600;
+}
+
+/* ====== ERRORI ====== */
+.alert-danger {
+    background: rgba(255, 0, 0, 0.25) !important;
+    border: 1px solid rgba(255, 0, 0, 0.4) !important;
+    color: #ffbaba !important;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+}
+
+/* ====== LABEL ====== */
+.auth-box label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* ====== INPUT ====== */
+.auth-box input,
+.auth-box .form-control {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+    border-radius: 8px !important;
+    border: none !important;
+    outline: none !important;
+    background: rgba(255, 255, 255, 0.20) !important;
+    color: white !important;
+    font-size: 15px;
+}
+
+.auth-box input:focus {
+    background: rgba(255, 255, 255, 0.30) !important;
+}
+
+/* ====== BOTTONI ====== */
+.auth-box button,
+.auth-box .btn-primary {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px !important;
+    border: none !important;
+    background: white !important;
+    color: #1e3c72 !important;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.auth-box button:hover {
+    background: #e6e6e6 !important;
+}
+
+/* ====== LINK SECONDARI ====== */
+.auth-links {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.auth-links a {
+    color: #fff;
     text-decoration: underline;
+    font-size: 14px;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 700px) {
+    nav {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .nav-auth {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .auth-box {
+        padding: 22px;
+        max-width: 90%;
+    }
 }

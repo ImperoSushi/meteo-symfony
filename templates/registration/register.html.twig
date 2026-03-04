@@ -1,23 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Registrati{% endblock %}
 
 {% block body %}
-    {% for flash_error in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-    {% endfor %}
+<div class="auth-container">
+    <div class="auth-box">
 
-    <h1>Register</h1>
+        <h1>Registrati</h1>
 
-    {{ form_errors(registrationForm) }}
+        {# Errori generali (es. email già usata, problemi di validazione) #}
+        {% for flash_error in app.flashes('verify_email_error') %}
+            <div class="alert alert-danger">{{ flash_error }}</div>
+        {% endfor %}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+        {{ form_start(registrationForm) }}
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+            <label for="registration_email">Email</label>
+            {{ form_widget(registrationForm.email, {
+                attr: { class: 'form-control' }
+            }) }}
+
+            <label for="registration_plainPassword">Password</label>
+            {{ form_widget(registrationForm.plainPassword, {
+                attr: { class: 'form-control' }
+            }) }}
+        
+            <button type="submit">Crea account</button>
+
+        {{ form_end(registrationForm) }}
+
+        <div class="auth-links">
+            <a href="{{ path('app_login') }}">Hai già un account? Accedi</a>
+        </div>
+
+    </div>
+</div>
 {% endblock %}

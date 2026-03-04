@@ -15,6 +15,10 @@ class FavoritesController extends AbstractController
     #[Route('/favorites/add', methods: ['POST'])]
     public function add(Request $request, EntityManagerInterface $em): JsonResponse
     {
+        if (!$this->getUser()) {
+            return new JsonResponse(['error' => 'login_required']);
+        }
+
         $data = json_decode($request->getContent(), true);
 
         $fav = new FavoriteCity();
@@ -36,7 +40,12 @@ class FavoritesController extends AbstractController
     #[Route('/favorites/list', methods: ['GET'])]
     public function list(FavoriteCityRepository $repo): JsonResponse
     {
+        
         $user = $this->getUser();
+
+        if (!$user) {
+            return new JsonResponse(['error' => 'login_required']);
+        }
 
         $favorites = $repo->findBy(
             ['user' => $user],
