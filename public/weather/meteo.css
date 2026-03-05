@@ -8,7 +8,7 @@
 
 /* ====== SFONDO GENERALE ====== */
 body {
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    background: linear-gradient(135deg, #27498a, #67a4bd, #27498a);
     min-height: 100vh;
     padding: 0;
     color: #fff;
@@ -23,9 +23,12 @@ h1 {
 }
 
 /* ============================================================
-   NAVBAR — IDENTICA A LOGIN/REGISTER
+   NAVBAR
    ============================================================ */
 nav {
+    position: sticky;
+    top: 0;
+    z-index: 999;
     width: 100%;
     padding: 15px 25px;
     background: rgba(255, 255, 255, 0.10);
@@ -56,10 +59,6 @@ nav ul li a {
     transition: 0.2s;
 }
 
-nav ul li a:hover {
-    background: rgba(255, 255, 255, 0.25);
-}
-
 .nav-auth {
     display: flex;
     align-items: center;
@@ -86,7 +85,7 @@ nav ul li a:hover {
 }
 
 /* ============================================================
-   FORM METEO — GLASSY COME LOGIN/REGISTER
+   FORM METEO
    ============================================================ */
 form {
     max-width: 450px;
@@ -335,13 +334,8 @@ button[type="reset"]:hover {
         display: block;
         width: 100%;
         padding: 12px 0;
-        background: rgba(255, 255, 255, 0.12);
         border-radius: 8px;
         transition: 0.2s;
-    }
-
-    nav ul li a:hover {
-        background: rgba(255, 255, 255, 0.25);
     }
 
     .nav-auth {

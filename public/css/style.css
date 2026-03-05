@@ -13,7 +13,7 @@ html, body {
 }
 
 body {
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    background: linear-gradient(135deg, #27498a, #67a4bd, #27498a);
     min-height: 100vh;
     margin: 0;
     padding: 0;
@@ -51,10 +51,6 @@ nav ul li a {
     padding: 8px 12px;
     border-radius: 6px;
     transition: 0.2s;
-}
-
-nav ul li a:hover {
-    background: rgba(255, 255, 255, 0.25);
 }
 
 .nav-auth {
@@ -208,10 +204,6 @@ nav ul li a:hover {
         background: rgba(255, 255, 255, 0.12);
         border-radius: 8px;
         transition: 0.2s;
-    }
-
-    nav ul li a:hover {
-        background: rgba(255, 255, 255, 0.25);
     }
 
     .nav-auth {
