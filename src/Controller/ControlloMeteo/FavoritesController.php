@@ -15,7 +15,9 @@ class FavoritesController extends AbstractController
     #[Route('/favorites/add', methods: ['POST'])]
     public function add(Request $request, EntityManagerInterface $em): JsonResponse
     {
-        if (!$this->getUser()) {
+        $user = $this->getUser();
+
+        if (!$user) {
             return new JsonResponse(['error' => 'login_required']);
         }
 
@@ -29,7 +31,7 @@ class FavoritesController extends AbstractController
         $fav->setTemperature($data['temperature']);
         $fav->setDescription($data['description']);
 
-        $fav->setUser($this->getUser());
+        $fav->setUser($user);
 
         $em->persist($fav);
         $em->flush();
@@ -40,7 +42,6 @@ class FavoritesController extends AbstractController
     #[Route('/favorites/list', methods: ['GET'])]
     public function list(FavoriteCityRepository $repo): JsonResponse
     {
-        
         $user = $this->getUser();
 
         if (!$user) {

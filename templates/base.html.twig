@@ -22,7 +22,7 @@
 
     <div class="nav-auth">
         {% if app.user %}
-            <span class="nav-user">Ciao {{ app.user.email }}</span>
+            <span class="nav-user">Ciao, {{ app.user.email }}</span>
             <a class="nav-btn" href="{{ path('app_logout') }}">Logout</a>
         {% else %}
             <a class="nav-btn" href="{{ path('app_login') }}">Login</a>

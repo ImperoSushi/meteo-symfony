@@ -313,22 +313,48 @@ button[type="reset"]:hover {
 @media (max-width: 700px) {
     nav {
         flex-direction: column;
+        align-items: center;
         text-align: center;
-        padding: 15px;
+        padding: 20px;
+        gap: 18px;
     }
 
     nav ul {
         flex-direction: column;
+        width: 100%;
         gap: 12px;
+        padding: 0;
+        margin: 0;
+    }
+
+    nav ul li {
+        width: 100%;
+    }
+
+    nav ul li a {
+        display: block;
+        width: 100%;
+        padding: 12px 0;
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 8px;
+        transition: 0.2s;
+    }
+
+    nav ul li a:hover {
+        background: rgba(255, 255, 255, 0.25);
     }
 
     .nav-auth {
         flex-direction: column;
-        gap: 10px;
+        width: 100%;
+        gap: 12px;
     }
 
     .nav-btn {
         width: 100%;
+        padding: 12px 0;
         text-align: center;
+        background: rgba(255, 255, 255, 0.18);
     }
+
 }

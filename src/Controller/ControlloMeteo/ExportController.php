@@ -13,8 +13,14 @@ class ExportController extends AbstractController
 {
     #[Route('/export/excel', name: 'export_excel')]
     public function exportExcel(FavoriteCityRepository $repo, ManageExcel $excelService): Response
-    {
-        $favorites = $repo->findAll();
+    {   
+        $user = $this->getUser();
+
+        if (!$user) {
+            throw $this->createAccessDeniedException('Devi essere loggato per esportare i preferiti');
+        }
+
+        $favorites = $repo->findBy(['user' => $user]);
 
         $excelData = array_map(function(FavoriteCity $fav) {
             return [

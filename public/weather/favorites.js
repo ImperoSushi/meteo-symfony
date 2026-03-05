@@ -9,7 +9,7 @@ function loadFavorites() {
 
         list.innerHTML = '';
 
-        // --- utente NON loggato ---
+        // --- utente non loggato ---
         if (data.error === "login_required") {
             title.textContent = "Login necessario";
             excelBtn.style.display = 'none';
@@ -115,7 +115,6 @@ function addFavorite(city, country, lat, lon) {
             loadFavorites();
         }
     });
-
 }
 
 // --- UPDATE ---

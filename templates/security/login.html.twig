@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-{% endblock %}
+{% block title %}Accedi{% endblock %}
 
 {% block body %}
 <div class="auth-container">
@@ -32,7 +30,7 @@
 
         <div class="auth-links">
             <a href="{{ path('app_register') }}">Non hai un account? Registrati</a>
-        </div>
+        </div>  
 
     </div>
 </div>
