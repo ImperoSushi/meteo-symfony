@@ -9,20 +9,16 @@ function loadFavorites() {
 
         list.innerHTML = '';
 
-        // --- utente non loggato ---
         if (data.error === "login_required") {
-            title.textContent = "Login necessario";
+            title.textContent = "Devi eseguire l'accesso";
             excelBtn.style.display = 'none';
             return;
         }
 
-        // --- nessun preferito ---
         if (data.length === 0) {
             title.textContent = 'Nessun preferito';
             excelBtn.style.display = 'none';
-        } 
-        // --- preferiti presenti ---
-        else {
+        } else {
             title.textContent = 'I tuoi preferiti';
             excelBtn.style.display = 'block';
         }

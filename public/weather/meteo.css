@@ -30,7 +30,7 @@ nav {
     top: 0;
     z-index: 999;
     width: 100%;
-    padding: 15px 25px;
+    padding: 5px 25px;
     background: rgba(255, 255, 255, 0.10);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -73,7 +73,7 @@ nav ul li a {
 .nav-btn {
     padding: 8px 14px;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.20);
+    background: rgba(255, 255, 255, 0.18);
     color: white;
     text-decoration: none;
     font-weight: 500;
@@ -89,7 +89,7 @@ nav ul li a {
    ============================================================ */
 form {
     max-width: 450px;
-    margin: 0 auto 40px auto;
+    margin: 0 auto 25px auto;
     padding: 25px;
     background: rgba(255, 255, 255, 0.15);
     border-radius: 12px;
@@ -269,6 +269,7 @@ button[type="reset"]:hover {
     display: none;
     max-width: 500px;
     margin: 0 auto;
+    margin-bottom: 15px;
     padding: 25px;
     background: rgba(255, 255, 255, 0.18);
     border-radius: 12px;
@@ -347,7 +348,6 @@ button[type="reset"]:hover {
     .nav-btn {
         width: 100%;
         padding: 12px 0;
-        text-align: center;
         background: rgba(255, 255, 255, 0.18);
     }
 

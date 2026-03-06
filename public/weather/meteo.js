@@ -13,6 +13,10 @@ const el = {
     suggestions: document.getElementById('suggestions')
 };
 
+const GEO_API = 'https://geocoding-api.open-meteo.com/v1';
+
+
+
 // --- AUTOCOMPLETE ---
 
 let suggestionTimeout = null;
@@ -29,7 +33,7 @@ el.cityInput.addEventListener("input", () => {
     } else {
         clearTimeout(suggestionTimeout);
         suggestionTimeout = setTimeout(() => {
-            fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${query}&language=it&count=10`)
+            fetch(`${GEO_API}/search?name=${query}&language=it&count=10`)
                 .then(async res => {
                     const text = await res.text();
 
