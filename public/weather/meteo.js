@@ -1,4 +1,4 @@
-const el = {
+const el = { // el stands for element. This should be rename to elsObject
     form: document.getElementById('form'),
     cityInput: document.getElementById('city'),
     error: document.getElementById('error'),
@@ -21,7 +21,9 @@ const GEO_API = 'https://geocoding-api.open-meteo.com/v1';
 
 let suggestionTimeout = null;
 
-el.cityInput.addEventListener("input", () => {
+// This function has side effect
+// Make it pure
+el.cityInput.addEventListener("input", (ev) => {
     el.cityInput.dataset.lat = "";
     el.cityInput.dataset.lon = "";
     el.cityInput.dataset.country = "";
@@ -33,7 +35,9 @@ el.cityInput.addEventListener("input", () => {
     } else {
         clearTimeout(suggestionTimeout);
         suggestionTimeout = setTimeout(() => {
+            // TODO: use encodeURIComponent()
             fetch(`${GEO_API}/search?name=${query}&language=it&count=10`)
+                // Anti-pattern
                 .then(async res => {
                     const text = await res.text();
 
@@ -110,10 +114,12 @@ el.cityInput.addEventListener("input", () => {
 
 // --- FORM SUBMIT ---
 
+// DO not call event as e. Use ev instead, so we can search and find `ev`!
 el.form.addEventListener('submit', function(e) {
     el.suggestions.style.display = "none";
     weatherFun(e);
 });
+
 el.form.addEventListener('reset', function(e) {
     e.preventDefault();
     clearForm();
@@ -125,13 +131,19 @@ el.form.addEventListener('reset', function(e) {
 
 // --- FUNZIONE PRINCIPALE ---
 
+// This function is not an event handler, it shouldn't recieve the `ev`
+// possible params could be:
+/**
+ * 
+ * @param {string} cityName the city we want to query to
+ * @returns 
+ */
 function weatherFun(e) {
     e.preventDefault();
 
     const city = el.cityInput.value.trim();
     if (!city) {
         alert("Inserisci una città");
-
         return;
     }
 
@@ -148,6 +160,7 @@ function weatherFun(e) {
             country: el.cityInput.dataset.country
         })
     })
+    // Same as above
     .then(async res => {
         const text = await res.text();
 
@@ -179,6 +192,7 @@ function weatherFun(e) {
 // --- FUNZIONI DI UTILITÀ ---
 
 function clearForm() {
+    // I see a possible loop here
     el.city.textContent = "";
     el.country.textContent = "";
     el.temp.textContent = "";

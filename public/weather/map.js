@@ -7,6 +7,9 @@ function updateMap(lat, lon) {
     const position = [parseFloat(lat), parseFloat(lon)];
 
     const mapDiv = document.getElementById("map");
+    
+    // This could be null, triggering errors, because is not inside a 
+    // DOMContentLoaded callback
     mapDiv.style.display = "block";
 
     if (!map) {

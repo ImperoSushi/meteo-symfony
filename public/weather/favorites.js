@@ -24,8 +24,10 @@ function loadFavorites() {
         }
 
         data.forEach(fav => {
+            // First way
             const li = document.createElement('li');
 
+            // Second way (looks hacky, follow one way)
             li.innerHTML = `
                 <span class="fav-city"><strong>${fav.city} (${fav.country})</strong></span>
                 <span class="fav-temp">${fav.temperature ?? '--'}°C</span>
@@ -105,6 +107,7 @@ function addFavorite(city, country, lat, lon) {
     })
     .then(res => res.json())
     .then(data => {
+        // Use status code
         if (data.error === "login_required") {
             alert("Per aggiungere ai preferiti devi effettuare il login.");
         } else {
@@ -140,6 +143,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const box = document.getElementById("favorites-box");
 
     toggle.addEventListener("click", () => {
+        // This can also be done, adding/removing a specific css class,
+        // instead of mixing JS logic with CSS properties.
+        // While adding/removing class from an element is more JSish
         if (box.style.display === "none" || box.style.display === "") {
             box.style.display = "block";
             toggle.textContent = "⭐ Nascondi Preferiti";
