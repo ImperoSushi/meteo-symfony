@@ -73,7 +73,7 @@ el.cityInput.addEventListener("input", () => {
 
                     results.sort((cityA, cityB) => (cityB.population ?? 0) - (cityA.population ?? 0));
 
-                    results = results.slice(0, 4);
+                    results = results.slice(0, 3);
 
                     if (results.length === 0) {
                         el.suggestions.style.display = "none";

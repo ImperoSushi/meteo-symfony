@@ -129,7 +129,7 @@ function updateFavorite(id, temperature, description) {
 // --- DELETE ---
 function deleteFavorite(id) {
     fetch(`/favorites/delete/${id}`, { method: 'DELETE' })
-        .then(() => loadFavorites());
+    .then(() => loadFavorites());
 }
 
 // ---FAVORITES --- 

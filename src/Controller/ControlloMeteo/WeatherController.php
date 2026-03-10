@@ -10,8 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class WeatherController extends AbstractController
-{
-    // URL base delle API 
+{ 
     private const GEO_API = 'https://geocoding-api.open-meteo.com/v1';
     private const GEO_SEARCH = '/search?count=1&language=it&format=json';
     private const METEO_API = 'https://api.open-meteo.com/v1';
@@ -37,8 +36,8 @@ class WeatherController extends AbstractController
             return $this->json(['error' => 'Nessuna città inserita']);
         }
 
-        if (strlen($city) > 20) {
-            $city = substr($city, 0, 20);
+        if (strlen($city) > 30) {
+            $city = substr($city, 0, 30);
         }
 
         if (!$lat || !$lon) {
