@@ -1,28 +1,35 @@
-
 // Leaflet 
+const MAP_TILE_API = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+
 let map = null;
 let marker = null;
 
-function updateMap(lat, lon) {
-    const position = [parseFloat(lat), parseFloat(lon)];
+document.addEventListener("DOMContentLoaded", () => {
 
-    const mapDiv = document.getElementById("map");
-    mapDiv.style.display = "block";
+    function updateMap(lat, lon) {
+        const position = [parseFloat(lat), parseFloat(lon)];
 
-    if (!map) {
-        map = L.map('map').setView(position, 10);
+        const mapDiv = document.getElementById("map");
+        if (!mapDiv) { return };
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19
-        }).addTo(map);
+        mapDiv.style.display = "block";
 
-        marker = L.marker(position).addTo(map);
-    } else {
-        map.setView(position, 10);
-        marker.setLatLng(position);
+        if (!map) {
+            map = L.map('map').setView(position, 10);
+
+            L.tileLayer(MAP_TILE_API, { maxZoom: 19 }).addTo(map);
+
+            marker = L.marker(position).addTo(map);
+        } else {
+            map.setView(position, 10);
+            marker.setLatLng(position);
+        }
+
+        setTimeout(() => {
+            map.invalidateSize();
+        }, 200);
     }
 
-    setTimeout(() => {
-        map.invalidateSize();
-    }, 200);
-}
+    // Rendi disponibile la funzione globalmente
+    window.updateMap = updateMap;
+});

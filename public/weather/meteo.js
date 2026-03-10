@@ -1,4 +1,7 @@
-const el = {
+
+// ELEMENTS
+
+const elsObject = {
     form: document.getElementById('form'),
     cityInput: document.getElementById('city'),
     error: document.getElementById('error'),
@@ -15,194 +18,218 @@ const el = {
 
 const GEO_API = 'https://geocoding-api.open-meteo.com/v1';
 
-
-
-// --- AUTOCOMPLETE ---
-
 let suggestionTimeout = null;
 
-el.cityInput.addEventListener("input", () => {
-    el.cityInput.dataset.lat = "";
-    el.cityInput.dataset.lon = "";
-    el.cityInput.dataset.country = "";
 
-    const query = el.cityInput.value.trim();
+// ADD EVENT LISTENERS
+
+function addEventListeners() {
+    elsObject.cityInput.addEventListener("input", onCityInput);
+    elsObject.form.addEventListener("submit", onFormSubmit);
+    elsObject.form.addEventListener("reset", onFormReset);
+}
+
+addEventListeners();
+
+function onCityInput(ev) {
+    const input = ev.target;
+
+    // reset dataset
+    input.dataset.lat = "";
+    input.dataset.lon = "";
+    input.dataset.country = "";
+
+    const query = input.value.trim();
 
     if (query.length < 2) {
-        el.suggestions.style.display = "none";
-    } else {
-        clearTimeout(suggestionTimeout);
-        suggestionTimeout = setTimeout(() => {
-            fetch(`${GEO_API}/search?name=${query}&language=it&count=10`)
-                .then(async res => {
-                    const text = await res.text();
+        elsObject.suggestions.style.display = "none";
 
-                    if (!text.startsWith("{")) {                
-                        el.suggestions.style.display = "none";          
-
-                        return { results: [] };
-                    }
-
-                    return JSON.parse(text);
-                })
-                .then(data => {
-
-                    if (!data.results) {
-                        el.suggestions.style.display = "none";
-
-                        return;
-                    }
-
-                    // --- FILTRI IMPORTANTI ---
-                    const validTypes = ["PPL", "PPLA", "PPLA2", "PPLC"];
-                    /*
-                        Codice                   Significato                                    Cosa Indica                
-                        PPL	  | Populated Place	                               | Una città o paese normale
-                        PPLA  |	Seat of a first‑order administrative division  | Capoluogo di regione / provincia
-                        PPLA2 |	Seat of a second‑order division	               | Capoluogo di una provincia più piccola
-                        PPLA3 |	Seat of a third‑order division	               | Capoluogo di distretto
-                        PPLC  |	Capital of a country	                       | Capitale nazionale (Roma, Parigi, Tokyo…)
-                        PPLX  |	Section of a populated place	               | Quartiere o frazione
-                        PPLF  |	Farm village	                               | Villaggio rurale
-                        PPLG  |	Seat of government	                           | Sede del governo
-                        PPLH  |	Historical place	                           | Città storica non più abitata
-                    */
-                   let results = data.results.filter(city =>
-                        validTypes.includes(city.feature_code) && (city.population ?? 0) > 100 && city.country && city.country.trim() !== ""   
-                    );
-
-                    results.sort((cityA, cityB) => (cityB.population ?? 0) - (cityA.population ?? 0));
-
-                    results = results.slice(0, 3);
-
-                    if (results.length === 0) {
-                        el.suggestions.style.display = "none";
-                    } else {
-                        el.suggestions.innerHTML = "";
-                        el.suggestions.style.display = "block";
-
-                        results.forEach(city => {
-                            const item = document.createElement("div");
-                            item.classList.add("suggestion-item");
-
-                            item.textContent = `${city.name}, ${city.country}`;
-
-                            item.addEventListener("click", () => {
-                                el.cityInput.value = city.name;
-                                el.cityInput.dataset.lat = city.latitude;
-                                el.cityInput.dataset.lon = city.longitude;
-                                el.cityInput.dataset.country = city.country;
-
-                                el.suggestions.style.display = "none";
-
-                                el.cityInput.blur(); 
-                                el.cityInput.focus();
-                            });
-
-                            el.suggestions.appendChild(item);
-                        });
-                    }
-                });
-        }, 250);
+        return;
     }
-});
+
+    clearTimeout(suggestionTimeout);
+    suggestionTimeout = setTimeout(() => fetchSuggestions(query), 250);
+}
 
 
-// --- FORM SUBMIT ---
+// FETCH SUGGESTIONS
 
-el.form.addEventListener('submit', function(e) {
-    el.suggestions.style.display = "none";
-    weatherFun(e);
-});
-el.form.addEventListener('reset', function(e) {
-    e.preventDefault();
+async function fetchSuggestions(query) {
+    const url = `${GEO_API}/search?name=${encodeURIComponent(query)}&language=it&count=10`;
+
+    const res = await fetch(url);
+    const text = await res.text();
+
+    // risposta non JSON
+    if (!text.startsWith("{")) {
+        elsObject.suggestions.style.display = "none";
+
+        return;
+    }
+
+    const data = JSON.parse(text);
+
+    if (!data.results) {
+        elsObject.suggestions.style.display = "none";
+
+        return;
+    }
+
+    // filtri
+    const validTypes = ["PPL", "PPLA", "PPLA2", "PPLC"];
+    let results = data.results.filter(city =>
+        validTypes.includes(city.feature_code) &&
+        (city.population ?? 0) > 100 &&
+        city.country?.trim() !== ""
+    );
+
+    results.sort((a, b) => (b.population ?? 0) - (a.population ?? 0));
+    results = results.slice(0, 3);
+
+    if (results.length === 0) {
+        elsObject.suggestions.style.display = "none";
+
+        return;
+    }
+
+    renderSuggestions(results);
+}
+
+
+// FORMATTING FUNCTION
+
+function formatSuggestion(city) {
+    return `${city.name}, ${city.country}`;
+}
+
+
+// DOM CREATION FUNCTION
+
+function createSuggestionItem(city) {
+    const item = document.createElement("div");
+    item.classList.add("suggestion-item");
+    item.textContent = formatSuggestion(city);
+
+    item.addEventListener("click", () => {
+        elsObject.cityInput.value = city.name;
+        elsObject.cityInput.dataset.lat = city.latitude;
+        elsObject.cityInput.dataset.lon = city.longitude;
+        elsObject.cityInput.dataset.country = city.country;
+
+        elsObject.suggestions.style.display = "none";
+
+        elsObject.cityInput.blur();
+        elsObject.cityInput.focus();
+    });
+
+    return item;
+}
+
+
+// RENDER SUGGESTIONS
+
+function renderSuggestions(results) {
+    elsObject.suggestions.innerHTML = "";
+    elsObject.suggestions.style.display = "block";
+
+    results.forEach(city => {
+        const item = createSuggestionItem(city);
+        elsObject.suggestions.appendChild(item);
+    });
+}
+
+
+// FORM SUBMIT
+
+function onFormSubmit(ev) {
+    ev.preventDefault();
+    elsObject.suggestions.style.display = "none";
+
+    const cityName = elsObject.cityInput.value.trim();
+    weatherFun(cityName);
+}
+
+function onFormReset(ev) {
+    ev.preventDefault();
     clearForm();
     hideError();
-    el.cityInput.value = "";
+    elsObject.cityInput.value = "";
     document.getElementById("map").style.display = "none";
-});
+}
 
 
-// --- FUNZIONE PRINCIPALE ---
+// MAIN WEATHER FUNCTION
 
-function weatherFun(e) {
-    e.preventDefault();
-
-    const city = el.cityInput.value.trim();
-    if (!city) {
+async function weatherFun(cityName) {
+    if (!cityName) {
         alert("Inserisci una città");
 
         return;
     }
 
-    fetch('/meteo/api', {
+    const res = await fetch('/meteo/api', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
         body: JSON.stringify({
-            city,
-            lat: el.cityInput.dataset.lat,
-            lon: el.cityInput.dataset.lon,
-            country: el.cityInput.dataset.country
+            city: cityName,
+            lat: elsObject.cityInput.dataset.lat,
+            lon: elsObject.cityInput.dataset.lon,
+            country: elsObject.cityInput.dataset.country
         })
-    })
-    .then(async res => {
-        const text = await res.text();
+    });
 
-        // Se la risposta NON è JSON
-        if (!text.startsWith("{")) {
-            console.error("Risposta non JSON:", text);
-            showError("Errore temporaneo del servizio meteo. Riprova tra qualche secondo.");
+    const text = await res.text();
 
-            return { error: "Servizio non disponibile" };
-        }
+    if (!text.startsWith("{")) {
+        showError("Errore temporaneo del servizio meteo. Riprova tra qualche secondo.");
 
-        return JSON.parse(text);
-    })
-    .then(data => {
-        if (data.error) {
-            clearForm();
-            showError(data.error);
-        } else {
-            hideError();
-            fillForm(data);
-        }
+        return;
+    }
 
-        el.result.scrollIntoView({ behavior: "smooth", block: "start"});
-    })
-    .catch(err => console.error("Errore: ", err));
+    const data = JSON.parse(text);
+
+    if (data.error) {
+        clearForm();
+        showError(data.error);
+    } else {
+        hideError();
+        fillForm(data);
+    }
+
+    elsObject.result.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 
-// --- FUNZIONI DI UTILITÀ ---
+// UTILITY FUNCTIONS
 
 function clearForm() {
-    el.city.textContent = "";
-    el.country.textContent = "";
-    el.temp.textContent = "";
-    el.desc.textContent = "";
-    el.lat.textContent = "";
-    el.lon.textContent = "";
+    elsObject.city.textContent = "";
+    elsObject.country.textContent = "";
+    elsObject.temp.textContent = "";
+    elsObject.desc.textContent = "";
+    elsObject.lat.textContent = "";
+    elsObject.lon.textContent = "";
     document.getElementById("map").style.display = "none";
-    el.favoriteStar.style.display = "none";
-    el.suggestions.style.display = "none";
+    elsObject.favoriteStar.style.display = "none";
+    elsObject.suggestions.style.display = "none";
 }
 
 function fillForm(data) {
-    el.result.style.display = "block";
-    el.city.textContent = data.city;
-    el.country.textContent = data.country;
-    el.temp.textContent = data.temperature + "°C";
-    el.desc.textContent = data.description;
-    el.lat.textContent = data.latitude;
-    el.lon.textContent = data.longitude;
+    elsObject.result.style.display = "block";
+    elsObject.city.textContent = data.city;
+    elsObject.country.textContent = data.country;
+    elsObject.temp.textContent = data.temperature + "°C";
+    elsObject.desc.textContent = data.description;
+    elsObject.lat.textContent = data.latitude;
+    elsObject.lon.textContent = data.longitude;
 
     updateMap(data.latitude, data.longitude);
 
-    el.favoriteStar.style.display = "inline-block";
-    el.favoriteStar.onclick = () => {
+    elsObject.favoriteStar.style.display = "inline-block";
+    elsObject.favoriteStar.onclick = () => {
         addFavorite(
             data.city,
             data.country,
@@ -215,11 +242,11 @@ function fillForm(data) {
 }
 
 function showError(msg) {
-    el.result.style.display = "block";
-    el.error.textContent = msg;
+    elsObject.result.style.display = "block";
+    elsObject.error.textContent = msg;
 }
 
 function hideError() {
-    el.result.style.display = "none";
-    el.error.textContent = "";
+    elsObject.result.style.display = "none";
+    elsObject.error.textContent = "";
 }

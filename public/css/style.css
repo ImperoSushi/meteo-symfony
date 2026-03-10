@@ -206,15 +206,14 @@ nav ul li a {
     }
 
     .nav-auth {
-        flex-direction: column;
-        width: 100%;
-        gap: 12px;
+        width: 50%;
+        gap: 24px;
     }
 
     .nav-btn {
         width: 100%;
         padding: 12px 0;
-        text-align: center;
         background: rgba(255, 255, 255, 0.18);
     }
 }
+

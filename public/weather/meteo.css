@@ -6,6 +6,10 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
+.hidden {
+    display: none;
+}
+
 /* ====== SFONDO GENERALE ====== */
 body {
     background: linear-gradient(135deg, #27498a, #67a4bd, #27498a);
@@ -203,7 +207,6 @@ button[type="reset"]:hover {
 }
 
 #favorites-box {
-    display: none;
     max-width: 500px;
     margin: 0 auto 20px auto;
     padding: 20px;
@@ -279,6 +282,8 @@ button[type="reset"]:hover {
 
 .row {
     display: flex;
+    align-items: center;
+    gap: 8px;
     justify-content: space-between;
     padding: 8px 12px;
     background: rgba(255,255,255,0.15);
@@ -289,12 +294,12 @@ button[type="reset"]:hover {
 /* ====== STELLA ====== */
 #favorite-star {
     float: left;
-    padding: 0 5px;
     cursor: pointer;
     font-size: 26px;
-    display: none;
-    margin-top: 4px;
+    margin-right: 6px;
     transition: transform 0.2s ease, color 0.2s ease;
+    position: relative;
+    z-index: 10;
 }
 
 #favorite-star:hover {
@@ -340,9 +345,8 @@ button[type="reset"]:hover {
     }
 
     .nav-auth {
-        flex-direction: column;
-        width: 100%;
-        gap: 12px;
+        width: 50%;
+        gap: 24px;
     }
 
     .nav-btn {
@@ -350,5 +354,4 @@ button[type="reset"]:hover {
         padding: 12px 0;
         background: rgba(255, 255, 255, 0.18);
     }
-
 }
