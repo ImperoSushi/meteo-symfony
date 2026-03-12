@@ -13,7 +13,8 @@ const elsObject = {
     lat: document.getElementById('lat'),
     lon: document.getElementById('lon'),
     favoriteStar: document.getElementById('favorite-star'),
-    suggestions: document.getElementById('suggestions')
+    suggestions: document.getElementById('suggestions'),
+    map: document.getElementById("map")
 };
 
 const GEO_API = 'https://geocoding-api.open-meteo.com/v1';
@@ -78,12 +79,10 @@ async function fetchSuggestions(query) {
     // filtri
     const validTypes = ["PPL", "PPLA", "PPLA2", "PPLC"];
     let results = data.results.filter(city =>
-        validTypes.includes(city.feature_code) &&
-        (city.population ?? 0) > 100 &&
-        city.country?.trim() !== ""
+        validTypes.includes(city.feature_code) && (city.population ?? 0) > 100 && city.country.trim() !== ""
     );
 
-    results.sort((a, b) => (b.population ?? 0) - (a.population ?? 0));
+    results.sort((cityA, cityB) => (cityB.population ?? 0) - (cityA.population ?? 0));
     results = results.slice(0, 3);
 
     if (results.length === 0) {
@@ -154,7 +153,7 @@ function onFormReset(ev) {
     clearForm();
     hideError();
     elsObject.cityInput.value = "";
-    document.getElementById("map").style.display = "none";
+    elsObject.map.style.display = "none";
 }
 
 
@@ -212,7 +211,7 @@ function clearForm() {
     elsObject.desc.textContent = "";
     elsObject.lat.textContent = "";
     elsObject.lon.textContent = "";
-    document.getElementById("map").style.display = "none";
+    elsObject.map.style.display = "none";
     elsObject.favoriteStar.style.display = "none";
     elsObject.suggestions.style.display = "none";
 }

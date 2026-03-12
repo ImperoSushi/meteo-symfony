@@ -18,7 +18,7 @@ class FavoritesController extends AbstractController
         $user = $this->getUser();
 
         if (!$user) {
-            return new JsonResponse(['error' => 'login_required']);
+            return new JsonResponse(['error' => 'login_required'], 401);
         }
 
         $data = json_decode($request->getContent(), true);
@@ -45,7 +45,7 @@ class FavoritesController extends AbstractController
         $user = $this->getUser();
 
         if (!$user) {
-            return new JsonResponse(['error' => 'login_required']);
+            return new JsonResponse(['error' => 'login_required'], 401);
         }
 
         $favorites = $repo->findBy(

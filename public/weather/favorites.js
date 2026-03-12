@@ -86,8 +86,8 @@ function renderFavorites(favorites) {
             });
         });
 
-        li.querySelector(".delete-fav").addEventListener("click", e => {
-            e.stopPropagation();
+        li.querySelector(".delete-fav").addEventListener("click", ev => {
+            ev.stopPropagation();
             deleteFavorite(fav.id);
         });
 
@@ -190,9 +190,10 @@ function deleteFavorite(id) {
 
 document.addEventListener("DOMContentLoaded", () => {
     loadFavorites();
-
+    
     const toggle = document.getElementById("toggle-favorites");
     const box = document.getElementById("favorites-box");
+    box.classList.toggle("hidden");
 
     toggle.addEventListener("click", () => {
         box.classList.toggle("hidden");
