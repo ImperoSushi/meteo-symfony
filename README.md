@@ -1,4 +1,4 @@
-# Weather App - Spiegazione del Progetto
+# Meteo App - Spiegazione del Progetto
 
 ## Cos'è questo progetto?
 
