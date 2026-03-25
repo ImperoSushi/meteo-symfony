@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Inter', Arial, Helvetica, sans-serif;
 }
 
 .hidden {
@@ -12,18 +12,20 @@
 
 /* ====== SFONDO GENERALE ====== */
 body {
-    background: linear-gradient(135deg, #27498a, #67a4bd, #27498a);
+    background: linear-gradient(135deg, #1f3c6d, #5f97b0, #1f3c6d);
     min-height: 100vh;
-    padding: 0;
-    color: #fff;    
+    color: #fff;
+    padding-bottom: 40px;
 }
 
 /* ====== TITOLO ====== */
 h1 {
     text-align: center;
-    margin-bottom: 30px;
-    font-size: 2.2rem;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    margin-bottom: 35px;
+    font-size: 2.4rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.35);
 }
 
 /* ============================================================
@@ -34,23 +36,22 @@ nav {
     top: 0;
     z-index: 999;
     width: 100%;
-    padding: 5px 25px;
+    padding: 10px 25px;
     background: rgba(255, 255, 255, 0.10);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-radius: 10px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    border-radius: 12px;
+    margin-bottom: 35px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 nav ul {
     list-style: none;
     display: flex;
-    gap: 20px;
+    gap: 22px;
 }
 
 nav ul li a {
@@ -58,30 +59,29 @@ nav ul li a {
     text-decoration: none;
     font-size: 16px;
     font-weight: 500;
-    padding: 8px 12px;
-    border-radius: 6px;
-    transition: 0.2s;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: 0.25s ease;
+}
+
+nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.25);
 }
 
 .nav-auth {
     display: flex;
     align-items: center;
-    gap: 15px;
-}
-
-.nav-user {
-    color: white;
-    font-size: 15px;
+    gap: 18px;
 }
 
 .nav-btn {
-    padding: 8px 14px;
+    padding: 8px 16px;
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.18);
     color: white;
     text-decoration: none;
     font-weight: 500;
-    transition: 0.2s;
+    transition: 0.25s ease;
 }
 
 .nav-btn:hover {
@@ -89,52 +89,63 @@ nav ul li a {
 }
 
 /* ============================================================
+   LAYOUT A UNA COLONNA
+   ============================================================ */
+.layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ============================================================
    FORM METEO
    ============================================================ */
 form {
-    max-width: 450px;
-    margin: 0 auto 25px auto;
-    padding: 25px;
+    max-width: 550px;
+    margin: 0 auto 30px auto;
+    padding: 32px;
     background: rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    animation: fadeIn 0.4s ease;
 }
 
 label {
     font-size: 1.1rem;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 input[type="text"] {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     margin-top: 12px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     outline: none;
     font-size: 1rem;
-    background: rgba(255, 255, 255, 0.678);
+    background: rgba(255, 255, 255, 0.75);
     color: #000;
+    transition: 0.2s ease;
 }
 
 input[type="text"]:focus {
-    background: rgb(255, 255, 255);
+    background: #fff;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
 }
 
 /* ====== BOTTONI ====== */
 button {
-    padding: 10px 18px;
-    margin-right: 10px;
+    padding: 12px 20px;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
-    transition: 0.2s ease-in-out;
-}
-
-form button {
-    margin-top: 20px;
+    transition: 0.25s ease;
+    margin-top: 16px;
 }
 
 button[type="submit"] {
@@ -166,19 +177,19 @@ button[type="reset"]:hover {
     top: 100%;
     left: 0;
     width: 100%;
-    background: rgba(255,255,255,0.85);
+    background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(4px);
     border-radius: 8px;
-    padding: 5px;
-    max-height: 200px;
+    padding: 6px;
+    max-height: 220px;
     overflow-y: auto;
     display: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     z-index: 999;
 }
 
 .suggestion-item {
-    padding: 8px 12px;
+    padding: 10px 12px;
     cursor: pointer;
     border-radius: 6px;
     transition: 0.2s ease;
@@ -187,123 +198,175 @@ button[type="reset"]:hover {
 }
 
 .suggestion-item:hover {
-    background: rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.1);
 }
 
-/* ====== PREFERITI ====== */
-#toggle-favorites {
-    padding: 10px 18px;
-    background-color: white;
-    color: #000;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-bottom: 15px;
-    transition: 0.2s ease-in-out;
-}
+/* ============================================================
+   PANNELLO PREFERITI A SCOMPARSA
+   ============================================================ */
 
-#toggle-favorites:hover {
-    background-color: #FFEA70;
-}
-
-#favorites-box {
-    max-width: 500px;
-    margin: 0 auto 20px auto;
-    padding: 20px;
+#favorites-panel {
+    position: fixed;
+    top: 0;
+    right: -360px;
+    width: 360px;
+    height: 100vh;
     background: rgba(255, 255, 255, 0.18);
-    border-radius: 12px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    backdrop-filter: blur(14px);
+    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.25);
+    padding: 28px;
+    transition: right 0.35s ease;
+    z-index: 2000;
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+    display: flex;
+    flex-direction: column;
 }
 
-#favorites-list {
-    list-style: none;
-    margin-top: 10px;
+#favorites-panel.open {
+    right: 0;
 }
 
-#favorites-list li {
+#favorites-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    z-index: 1500;
+}
+
+#favorites-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.favorites-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 12px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 8px;
-    margin-bottom: 8px;
-    cursor: pointer;
+    margin-bottom: 22px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 }
 
-#favorites-list li:hover {
-    background: rgba(255, 255, 255, 0.200);
+.favorites-header h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+#close-favorites {
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+    font-size: 18px;
+    transition: 0.25s ease;
+}
+
+#close-favorites:hover {
+    background: rgba(255, 255, 255, 0.45);
+}
+
+/* ============================================================
+   LISTA PREFERITI 
+   ============================================================ */
+
+#favorites-panel #favorites-list li {
+    padding: 16px 18px;
+    border-radius: 12px;
+    margin-bottom: 14px;
+    background: rgba(255, 255, 255, 0.15);
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 14px;
+    transition: 0.25s ease;
+}
+
+#favorites-panel #favorites-list li:hover {
+    background: rgba(255, 255, 255, 0.25);
 }
 
 .fav-city {
-    flex: 1;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .fav-temp {
-    width: 60px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    min-width: 55px;
     text-align: right;
-    font-weight: bold;
-    margin-right: 10px;
 }
 
+
+/* Bottone elimina */
 .delete-fav {
-    width: 28px;
-    height: 28px;
+    width: 34px;
+    height: 34px;
     display: flex;
     justify-content: center;
     align-items: center;
     background: #B22222;
     color: white;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: 0.25s ease;
 }
 
 .delete-fav:hover {
     background: #DC143C;
 }
 
-#excel-btn {
-    color: rgba(255, 255, 255, 0.774);
-}
-
-/* ====== RISULTATI METEO ====== */
+/* ============================================================
+   RISULTATI METEO 
+   ============================================================ */
 #weather-result {
     display: none;
-    max-width: 500px;
-    margin: 0 auto;
-    margin-bottom: 15px;
-    padding: 25px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+    padding: 35px;
     background: rgba(255, 255, 255, 0.18);
-    border-radius: 12px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    border-radius: 18px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+    animation: fadeIn 0.4s ease;
 }
 
 .row {
     display: flex;
     align-items: center;
-    gap: 8px;
     justify-content: space-between;
-    padding: 8px 12px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 8px;
-    margin-bottom: 5px;
+    gap: 12px;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    font-size: 1.05rem;
 }
 
 /* ====== STELLA ====== */
 #favorite-star {
     float: left;
     cursor: pointer;
-    font-size: 26px;
-    margin-right: 6px;
-    transition: transform 0.2s ease, color 0.2s ease;
-    position: relative;
-    z-index: 10;
+    font-size: 28px;
+    margin-right: 8px;
+    transition: transform 0.25s ease, color 0.25s ease;
 }
 
 #favorite-star:hover {
-    transform: scale(1.2);
+    transform: scale(1.25);
     color: gold;
 }
 
@@ -311,47 +374,44 @@ button[type="reset"]:hover {
 #error {
     color: #ffdddd;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
-/* ====== RESPONSIVE ====== */
+/* ====== ANIMAZIONI ====== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ====== RESPONSIVE EXTRA ====== */
 @media (max-width: 700px) {
     nav {
         flex-direction: column;
-        align-items: center;
-        text-align: center;
-        padding: 20px;
         gap: 18px;
+        padding: 20px;
     }
 
     nav ul {
         flex-direction: column;
         width: 100%;
         gap: 12px;
-        padding: 0;
-        margin: 0;
-    }
-
-    nav ul li {
-        width: 100%;
     }
 
     nav ul li a {
-        display: block;
         width: 100%;
+        text-align: center;
         padding: 12px 0;
-        border-radius: 8px;
-        transition: 0.2s;
     }
 
     .nav-auth {
-        width: 50%;
-        gap: 24px;
-    }
-
-    .nav-btn {
         width: 100%;
-        padding: 12px 0;
-        background: rgba(255, 255, 255, 0.18);
+        justify-content: center;
     }
 }

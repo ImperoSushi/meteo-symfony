@@ -12,17 +12,14 @@ function formatFavorite(fav) {
 function createFavoriteItem(fav, formatted) {
     const li = document.createElement("li");
 
-    // Città
     const city = document.createElement("span");
     city.className = "fav-city";
     city.innerHTML = `<strong>${formatted.cityLabel}</strong>`;
 
-    // Temperatura
     const temp = document.createElement("span");
     temp.className = "fav-temp";
     temp.textContent = formatted.temperatureLabel;
 
-    // Bottone elimina
     const del = document.createElement("button");
     del.className = "delete-fav";
     del.dataset.id = fav.id;
@@ -41,13 +38,14 @@ function renderFavorites(favorites) {
     const list = document.getElementById("favorites-list");
     const title = document.getElementById("favorites-title");
     const excelBtn = document.getElementById("excel-btn");
+    const panel = document.getElementById("favorites-panel");
+    const overlay = document.getElementById("favorites-overlay");
 
     list.innerHTML = "";
 
     if (favorites.error === "login_required") {
         title.textContent = "Devi eseguire l'accesso";
         excelBtn.style.display = "none";
-
         return;
     }
 
@@ -80,6 +78,9 @@ function renderFavorites(favorites) {
             updateMap(fav.latitude, fav.longitude);
             document.getElementById("weather-result").style.display = "block";
 
+            panel.classList.remove("open");
+            overlay.classList.remove("visible");
+
             document.getElementById("weather-result").scrollIntoView({
                 behavior: "smooth",
                 block: "start"
@@ -103,7 +104,6 @@ async function loadFavorites() {
 
     if (res.status === 401) {
         renderFavorites({ error: "login_required" });
-
         return;
     }
 
@@ -151,18 +151,17 @@ function addFavorite(city, country, lat, lon) {
             description
         })
     })
-    .then(res => {
-        if (res.status === 401) {
-            alert("Per aggiungere ai preferiti devi effettuare il login.");
+        .then(res => {
+            if (res.status === 401) {
+                alert("Per aggiungere ai preferiti devi effettuare il login.");
+                return;
+            }
 
-            return;
-        }
-
-        return res.json();
-    })
-    .then(data => {
-        if (data) loadFavorites();
-    });
+            return res.json();
+        })
+        .then(data => {
+            if (data) loadFavorites();
+        });
 }
 
 function updateFavorite(id, temperature, description) {
@@ -178,7 +177,6 @@ function deleteFavorite(id) {
         .then(res => {
             if (res.status === 401) {
                 alert("Non sei autorizzato a eliminare questo preferito.");
-                
                 return;
             }
             loadFavorites();
@@ -190,16 +188,24 @@ function deleteFavorite(id) {
 
 document.addEventListener("DOMContentLoaded", () => {
     loadFavorites();
-    
+
     const toggle = document.getElementById("toggle-favorites");
-    const box = document.getElementById("favorites-box");
-    box.classList.toggle("hidden");
+    const panel = document.getElementById("favorites-panel");
+    const overlay = document.getElementById("favorites-overlay");
+    const closeBtn = document.getElementById("close-favorites");
 
     toggle.addEventListener("click", () => {
-        box.classList.toggle("hidden");
+        panel.classList.add("open");
+        overlay.classList.add("visible");
+    });
 
-        toggle.textContent = box.classList.contains("hidden")
-            ? "⭐ Mostra Preferiti"
-            : "⭐ Nascondi Preferiti";
+    closeBtn.addEventListener("click", () => {
+        panel.classList.remove("open");
+        overlay.classList.remove("visible");
+    });
+
+    overlay.addEventListener("click", () => {
+        panel.classList.remove("open");
+        overlay.classList.remove("visible");
     });
 });
