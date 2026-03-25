@@ -58,7 +58,20 @@ class WeatherController extends AbstractController
             $longitude = (float)$lon;
         }
 
-        // Richiesta meteo
+        $weatherData = self::getWeatherData($client, $latitude, $longitude);
+
+        return $this->json([
+            'city'        => ucfirst($city),
+            'country'     => ucfirst($country),
+            'temperature' => round($weatherData['temperature']),
+            'description' => $weatherData['description'],
+            'latitude'    => $latitude,
+            'longitude'   => $longitude,
+        ]);
+    }
+
+    private static function getWeatherData(HttpClientInterface $client, float $latitude, float $longitude): array
+    {
         $weatherUrl = self::METEO_API . self::METEO_FORECAST . "&latitude={$latitude}&longitude={$longitude}";
         $weatherData = $client->request('GET', $weatherUrl)->toArray();
 
@@ -97,13 +110,9 @@ class WeatherController extends AbstractController
 
         $description = $weatherCodes[$weather['weathercode']] ?? "Condizione sconosciuta";
 
-        return $this->json([
-            'city'        => ucfirst($city),
-            'country'     => ucfirst($country),
-            'temperature' => round($weather['temperature']),
+        return [
+            'temperature' => $weather['temperature'],
             'description' => $description,
-            'latitude'    => $latitude,
-            'longitude'   => $longitude,
-        ]);
+        ];
     }
 }
